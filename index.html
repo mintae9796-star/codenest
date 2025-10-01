@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <!-- 반응형 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CodeNest · 홈페이지 제작</title>
+  <meta name="description" content="템플릿형부터 맞춤형까지, 반응형 홈페이지를 고급스럽게 제작합니다." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand:#000000;
+      --brand-grad:linear-gradient(135deg,#4c4c4d,#000000);
+      --ink:#0b1220;
+      --sub:#586272;
+      --bg:#ffffff;
+      --muted:#f6f8fe;
+      --line:#e7ebf4;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(8,15,35,.10);
+      --shadow-sm:0 4px 16px rgba(8,15,35,.06);
+      --container:1140px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:"Pretendard",system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,sans-serif;color:var(--ink);background:var(--bg)}
+    img{display:block;max-width:100%;height:auto}
+    a{color:inherit;text-decoration:none}
+    .container{width:100%;max-width:var(--container);margin:0 auto;padding:0 20px}
+
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1px solid transparent;border-radius:999px;padding:.85rem 1.1rem;font-weight:700;cursor:pointer;transition:.18s}
+    .btn:focus{outline:2px solid #5b8def33;outline-offset:2px}
+    .btn-primary{background:var(--brand-grad);color:#fff;box-shadow:0 8px 24px rgba(91,141,239,.32)}
+    .btn-primary:hover{filter:brightness(.97)}
+    .btn-ghost{background:#fff;border-color:var(--line)}
+    .btn-ghost:hover{background:#f8f9ff}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;min-height:68px}
+    .logo{display:flex;align-items:center;gap:.7rem;font-weight:900}
+    .logo img{height:44px;width:auto}
+    nav ul{display:flex;gap:1.25rem;list-style:none;margin:0;padding:0}
+    nav ul li a{font-weight:700}
+    .cta{display:flex;gap:.75rem;align-items:center}
+    .hamburger{display:none}
+
+    /* Mobile Nav */
+    @media (max-width:960px){
+      .hamburger{
+        display:inline-flex;align-items:center;justify-content:center;
+        width:40px;height:40px;border-radius:10px;
+        background:var(--brand-grad);color:#fff;font-size:20px;border:none
+      }
+      nav ul{display:none}
+      header.open nav ul{
+        display:flex;position:absolute;top:68px;left:0;right:0;
+        padding:16px;background:#fff;border-bottom:1px solid var(--line);flex-direction:column
+      }
+    }
+
+    /* Hero */
+    .hero{padding:108px 0 92px;background:linear-gradient(180deg,#f7f9ff 0%,#fff 100%)}
+    .hero-inner{max-width:780px;margin:0 auto;text-align:center}
+    .hero h1{font-size:clamp(30px,5vw,58px);line-height:1.1;margin:0 0 14px;font-weight:900;background:var(--brand-grad);background-clip:text;-webkit-text-fill-color:transparent}
+    .subtitle{font-size:1.12rem;color:var(--sub);margin:0 0 28px}
+    .hero .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+    /* Section */
+    section{padding:84px 0;border-top:1px solid var(--line)}
+    section.alt{background:var(--muted)}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+    h2{font-size:clamp(22px,3.2vw,34px);margin:0;font-weight:900;letter-spacing:-.01em}
+    .section-desc{color:var(--sub)}
+
+    /* Grids & Cards */
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    @media (max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:760px){.grid-4{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+    .card h3{margin:0 0 8px;font-size:1.15rem}
+    .service-card{text-align:center}
+    .service-card .icon{font-size:42px;margin-bottom:10px}
+
+    /* Portfolio (카드 기본) */
+    .folio{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--line);background:#eef3f9}
+    .folio .cover{aspect-ratio:16/10;background:linear-gradient(135deg,#e6eef8,#f5f7fb)}
+    .folio .meta{position:absolute;inset:auto 0 0 0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 100%);color:#fff;padding:14px 16px;font-size:.95rem}
+    .badge{display:inline-block;font-size:.8rem;background:#eef2ff;color:#272a6e;padding:.25rem .6rem;border-radius:999px;margin-right:.4rem}
+
+    /* Pricing (tiles) */
+    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .plan{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+    .plan-head{padding:22px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,#f5f8ff,#ffffff)}
+    .plan-head.simple{background:linear-gradient(180deg,#eef4ff,#ffffff)}
+    .plan-head.business{background:linear-gradient(180deg,#ecf7ff,#ffffff)}
+    .plan-head.premium{background:linear-gradient(180deg,#fff3d6,#ffffff)}
+    .plan-head h3{margin:0;font-size:1.2rem}
+    .price-line{font-size:1.15rem;font-weight:900}
+    .price-line .muted{color:#64748b;font-weight:600}
+    .badge-lite{display:inline-block;padding:.25rem .55rem;border-radius:999px;background:#eaf0ff;color:#22338c;font-size:.78rem;font-weight:900}
+    .badge-lite.best{background:#def7ea;color:#0b7a52}
+    .plan-meta{padding:10px 22px;color:#64748b;border-top:1px dashed var(--line)}
+    .plan-body{display:grid;grid-template-columns:1fr;gap:10px;padding:16px 22px}
+    .feat{display:flex;align-items:center;gap:.6rem}
+    .feat .ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#f1f5f9}
+    .plan-note{padding:10px 22px;color:#94a3b8;border-top:1px solid var(--line);font-size:.9rem}
+    @media (max-width:1024px){ .plans{grid-template-columns:1fr 1fr} }
+    @media (max-width:760px){ .plans{grid-template-columns:1fr} }
+
+    /* Reveal animation */
+    .reveal{opacity:0;transform:translateY(24px);transition:.5s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* Contact (본문 폼) */
+    form{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:560px){ .row{grid-template-columns:1fr} }
+    label{font-weight:700;font-size:.95rem}
+    input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;font:inherit}
+    textarea{min-height:110px;resize:vertical}
+
+    /* Footer */
+    footer{padding:56px 0;border-top:1px solid #1b1f33;background:#0c1220;color:#c6d0e1}
+    footer a{color:#e6edf7}
+    .footgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+
+    /* ===== 실시간 상담 상태: 가로 캐러셀 ===== */
+    .status-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm)}
+    .status-viewport{overflow:hidden;border-radius:16px;min-height:86px}
+    .status-track{
+      list-style:none;margin:0;padding:12px;
+      display:grid;grid-auto-flow:column;gap:12px;align-items:stretch;
+      grid-auto-columns:calc((100% - 12px*6)/7);
+      will-change:transform;
+    }
+    .status-item{
+      display:flex;align-items:center;gap:10px;
+      padding:14px 16px;border:1px solid var(--line);border-radius:14px;
+      background:#fff;box-shadow:var(--shadow-sm);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .badge-dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,#4c4c4d,#000000);box-shadow:0 0 0 4px #5b8def22;flex:none}
+    .name{font-weight:900}
+    .state{color:#475569;font-weight:700}
+    .slide-left{transition:transform .45s ease}
+    @media (max-width:1200px){.status-track{grid-auto-columns:calc((100% - 12px*4)/5)}}
+    @media (max-width:900px){.status-track{grid-auto-columns:calc((100% - 12px*2)/3)}}
+    @media (max-width:560px){.status-track{grid-auto-columns:100%}}
+
+    /* ===== 포트폴리오: 상담슬라이드처럼 ‘흐르는’ 캐러셀 ===== */
+    .portfolio-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm)}
+    .portfolio-viewport{overflow:hidden;border-radius:16px}
+    .portfolio-track{
+      list-style:none;margin:0;padding:12px;
+      display:grid;grid-auto-flow:column;gap:12px;align-items:stretch;
+      /* 데스크탑: 3칸 / 태블릿: 2칸 / 모바일: 1칸 */
+      grid-auto-columns:calc((100% - 12px*2)/3);
+      will-change:transform;
+    }
+    .portfolio-item{
+      height:100%;
+    }
+    .portfolio-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#eef3f9;height:100%}
+    .portfolio-card .cover{aspect-ratio:16/10;background:linear-gradient(135deg,#e6eef8,#f5f7fb)}
+    .portfolio-card .meta{padding:12px 14px;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 100%);color:#fff;font-size:.95rem}
+    @media (max-width:1024px){.portfolio-track{grid-auto-columns:calc((100% - 12px)/2)}}
+    @media (max-width:560px){.portfolio-track{grid-auto-columns:100%}}
+
+    /* ===== 플로팅 소셜 버튼 (우하단) ===== */
+    .side-tab{
+      position:fixed;right:18px;bottom:18px;z-index:80;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .side-tab a.btn{min-width:120px;justify-content:flex-start}
+    /* 모바일 시 가독성 확보 */
+    @media (max-width:560px){
+      .side-tab a.btn{min-width:auto;padding:.7rem .9rem}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="siteHeader">
+    <div class="container nav">
+      <a class="logo" href="#home" aria-label="CodeNest Home">
+        <img src="images/logo.png" alt="CodeNest 로고">
+      </a>
+      <nav>
+        <button class="hamburger" id="navToggle" aria-label="Menu">☰</button>
+        <ul>
+          <li><a href="#services">서비스</a></li>
+          <li><a href="#portfolio">포트폴리오</a></li>
+          <li><a href="#pricing">가격안내</a></li>
+          <li><a href="#blog">블로그</a></li>
+          <li><a href="#contact">상담문의</a></li>
+        </ul>
+      </nav>
+      <div class="cta"><a class="btn btn-primary" href="#contact">무료 상담</a></div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-inner">
+        <h1>고객 비즈니스를 돋보이게 하는<br>프리미엄 홈페이지</h1>
+        <p class="subtitle">CodeNest는 디자인과 기술을 결합해 신뢰와 성과를 만드는 웹사이트를 제공합니다.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contact">상담 받기</a>
+          <a class="btn btn-ghost" href="#portfolio">포트폴리오 보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services (4개) -->
+  <section id="services" class="alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>서비스</h2>
+        <p class="section-desc">원하는 방식에 따라 선택하세요.</p>
+      </div>
+      <div class="grid-4">
+        <article class="card service-card reveal">
+          <div class="icon">⚡</div>
+          <h3>템플릿형</h3>
+          <p>빠른 제작 · 합리적인 가격 · 반응형 기본 제공</p>
+          <a href="#contact" class="btn btn-primary">견적 받기</a>
+        </article>
+        <article class="card service-card reveal">
+          <div class="icon">🎨</div>
+          <h3>맞춤형</h3>
+          <p>브랜드 맞춤 디자인 · 특수 기능 & 커스터마이징</p>
+          <a href="#contact" class="btn btn-ghost">상담 요청</a>
+        </article>
+        <article class="card service-card reveal">
+          <div class="icon">🛒</div>
+          <h3>쇼핑몰 구축</h3>
+          <p>상품/결제/배송 연동 · 프로모션 배너 · GA4 전환추적</p>
+          <a href="#contact" class="btn btn-ghost">상담 요청</a>
+        </article>
+        <article class="card service-card reveal">
+          <div class="icon">🔧</div>
+          <h3>유지보수 · 운영</h3>
+          <p>콘텐츠 수정 · 배너 교체 · 보안 패치 · 속도 최적화</p>
+          <a href="#contact" class="btn btn-ghost">문의하기</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio: ‘흐르는’ 캐러셀 -->
+  <section id="portfolio">
+    <div class="container">
+      <div class="section-head">
+        <h2>포트폴리오</h2>
+        <p class="section-desc">실제 작업물을 통해 퀄리티를 확인하세요.</p>
+      </div>
+
+      <div class="portfolio-wrap">
+        <div class="portfolio-viewport">
+          <ul class="portfolio-track" id="portfolioTrack" aria-live="polite">
+            <li class="portfolio-item">
+              <article class="portfolio-card folio">
+                <div class="cover" aria-hidden="true"></div>
+                <div class="meta"><span class="badge">템플릿</span> 카페 홈페이지 · 메뉴/오시는길/문의</div>
+              </article>
+            </li>
+            <li class="portfolio-item">
+              <article class="portfolio-card folio">
+                <div class="cover" aria-hidden="true"></div>
+                <div class="meta"><span class="badge">맞춤형</span> 의원 홈페이지 · 예약/의료진/진료안내</div>
+              </article>
+            </li>
+            <li class="portfolio-item">
+              <article class="portfolio-card folio">
+                <div class="cover" aria-hidden="true"></div>
+                <div class="meta"><span class="badge">템플릿</span> 학원 홈페이지 · 수강신청/공지/상담</div>
+              </article>
+            </li>
+            <!-- 필요 시 추가 -->
+            <li class="portfolio-item">
+              <article class="portfolio-card folio">
+                <div class="cover" aria-hidden="true"></div>
+                <div class="meta"><span class="badge">맞춤형</span> 건설사 랜딩 · 상담/현장사례/견적</div>
+              </article>
+            </li>
+            <li class="portfolio-item">
+              <article class="portfolio-card folio">
+                <div class="cover" aria-hidden="true"></div>
+                <div class="meta"><span class="badge">템플릿</span> 스튜디오 · 갤러리/예약/리뷰</div>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>숨겨진 비용 없이 투명하게</h2>
+        <p class="section-desc">업계 표준을 바탕으로 패키지를 명확히 안내합니다.</p>
+      </div>
+
+      <div class="plans reveal" id="plansMount">
+        <article class="plan">
+          <div class="plan-head simple">
+            <div class="badge-lite">SIMPLE</div>
+            <h3>심플 X 홈페이지</h3>
+            <div class="price-line">₩1,500,000 ~ <span class="muted">/ 3주</span></div>
+            <a href="#contact" class="btn btn-primary">문의하기</a>
+          </div>
+          <div class="plan-meta">메인 1 page + 서브 5 page</div>
+          <div class="plan-body">
+            <div class="feat"><span class="ico">🖼️</span> 메인/서브 기본 디자인</div>
+            <div class="feat"><span class="ico">📱</span> 반응형(모바일, 태블릿)</div>
+            <div class="feat"><span class="ico">✉️</span> 기본 문의 폼</div>
+            <div class="feat"><span class="ico">⚙️</span> 기본 SEO/OG 설정</div>
+          </div>
+          <div class="plan-note">* 이미지/텍스트는 제공 자료 기준</div>
+        </article>
+
+        <article class="plan">
+          <div class="plan-head business">
+            <div class="badge-lite best">BUSINESS · BEST</div>
+            <h3>최적 K 홈페이지</h3>
+            <div class="price-line">₩2,200,000 ~ <span class="muted">/ 4주</span></div>
+            <a href="#contact" class="btn btn-primary">문의하기</a>
+          </div>
+          <div class="plan-meta">메인 1 page + 서브 10 page</div>
+          <div class="plan-body">
+            <div class="feat"><span class="ico">🧭</span> GA4/서치콘솔 연동</div>
+            <div class="feat"><span class="ico">⚡</span> 이미지/WebP 속도 최적화</div>
+            <div class="feat"><span class="ico">🧰</span> 섹션/레이아웃 커스텀</div>
+            <div class="feat"><span class="ico">🔒</span> 보안/스팸 방지 설정</div>
+          </div>
+          <div class="plan-note">* 필요 기능은 옵션으로 확장 가능</div>
+        </article>
+
+        <article class="plan">
+          <div class="plan-head premium">
+            <div class="badge-lite">PREMIUM</div>
+            <h3>맞춤 Z 홈페이지</h3>
+            <div class="price-line">₩3,000,000 ~ <span class="muted">/ 5주</span></div>
+            <a href="#contact" class="btn btn-ghost">상담 요청</a>
+          </div>
+          <div class="plan-meta">메인 1 page + 서브 15 page</div>
+          <div class="plan-body">
+            <div class="feat"><span class="ico">🧩</span> 맞춤 인터랙션/모션</div>
+            <div class="feat"><span class="ico">👥</span> 회원/예약/결제 연동</div>
+            <div class="feat"><span class="ico">🌐</span> 다국어/글로벌 SEO</div>
+            <div class="feat"><span class="ico">🛠️</span> 장기 유지보수/확장</div>
+          </div>
+          <div class="plan-note">* 요구사항에 따라 기간/비용 변동</div>
+        </article>
+      </div>
+
+      <div class="section-desc" style="margin-top:10px">모든 가격은 부가세 별도입니다.</div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-head">
+        <h2>블로그</h2>
+        <p class="section-desc">제작 팁과 운영 노하우를 공유합니다.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card post reveal">
+          <h3>카페 사장님을 위한 홈페이지 가이드</h3>
+          <p class="section-desc">메뉴/지도/문의폼 중심으로 구성하는 팁</p>
+        </article>
+        <article class="card post reveal">
+          <h3>네이버에 잘 뜨는 구조란?</h3>
+          <p class="section-desc">메타태그/OG/구조화데이터 체크리스트</p>
+        </article>
+        <article class="card post reveal">
+          <h3>모바일 퍼스트 반응형 설계</h3>
+          <p class="section-desc">그리드/타이포/이미지 최적화</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Status Ticker -->
+  <section id="status" class="alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>실시간 상담 상태</h2>
+        <p class="section-desc">가장 최근 접수부터 순서대로 보여드립니다.</p>
+      </div>
+
+      <div class="status-wrap">
+        <div class="status-viewport">
+          <ul id="statusTrack" class="status-track" aria-live="polite"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>상담 / 견적 요청</h2>
+        <p class="section-desc">연락처를 남겨주시면 빠르게 회신드릴게요.</p>
+      </div>
+      <div class="grid-2">
+        <form id="contactForm">
+          <div class="row">
+            <div>
+              <label for="name">이름</label>
+              <input id="name" name="name" required />
+            </div>
+            <div>
+              <label for="phone">연락처</label>
+              <input id="phone" name="phone" placeholder="010-0000-0000" required />
+            </div>
+          </div>
+          <label for="type">제작 유형</label>
+          <select id="type" name="type">
+            <option>템플릿형</option>
+            <option>맞춤형</option>
+            <option>상담 후 결정</option>
+          </select>
+          <label for="message">요청사항</label>
+          <textarea id="message" name="message" placeholder="업종/기능/예산/참고사이트 등을 적어주세요."></textarea>
+          <div class="cta">
+            <button type="submit" class="btn btn-primary">보내기</button>
+            <button type="reset" class="btn btn-ghost">초기화</button>
+          </div>
+          <p id="formStatus" class="section-desc" role="status" aria-live="polite"></p>
+        </form>
+        <aside class="card">
+          <h3 style="margin:0 0 6px 0">연락처</h3>
+          <p class="section-desc">영업시간: 평일 10:00 ~ 18:00</p>
+          <ul class="section-desc" style="margin:0 0 10px 18px">
+            <li>이메일: codenest0308@gmail.com</li>
+            <li>카카오톡 오픈채팅: <a href="https://open.kakao.com/o/sU9RvTUh">@codenest</a></li>
+            <li>전화: 010-5949-2945</li>
+          </ul>
+          <p class="section-desc">방문 상담은 예약제로 운영됩니다.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (모바일 PC보기 버튼 제거됨) -->
+  <footer>
+    <div class="container footgrid">
+      <div>
+        <div class="logo" style="margin-bottom:10px">
+          <img src="images/logo3.png" alt="CodeNest 로고">
+        </div>
+        <div class="section-desc">© <span id="year"></span> CodeNest. All rights reserved.</div>
+      </div>
+      <div style="text-align:right">
+        <div class="section-desc">사업자등록번호: 000-00-00000</div>
+        <div class="section-desc">주소: 서울특별시 중랑구 동일로 000</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 플로팅 소셜 버튼 -->
+  <div class="side-tab" aria-label="빠른 바로가기">
+    <a class="btn btn-primary" href="https://open.kakao.com/o/sU9RvTUh" target="_blank" rel="noopener" aria-label="카카오톡 오픈채팅으로 이동">💬 카카오톡</a>
+    <a class="btn btn-primary" href="https://www.instagram.com/codenest1001" target="_blank" rel="noopener" aria-label="인스타그램으로 이동">📷 인스타그램</a>
+    <a class="btn btn-primary" href="https://blog.naver.com/codenest1001" target="_blank" rel="noopener" aria-label="네이버 블로그로 이동">✍ 블로그</a>
+  </div>
+
+  <script>
+  /* === Apps Script 웹앱 URL (형이 넣어둔 값 유지) === */
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxjtXhqHaaxDx2CQ7wiJQiWw0TmZ34IchRoSrqjzaxOwVLyqJYTwPW3K3a8zS1TSiKE-w/exec";
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    /* Year */
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    /* Mobile nav toggle */
+    const headerEl = document.getElementById('siteHeader');
+    const navToggle = document.getElementById('navToggle');
+    if (navToggle && headerEl) navToggle.addEventListener('click', ()=> headerEl.classList.toggle('open'));
+
+    /* ====== 스프레드시트로 전송 (공통 함수) ====== */
+    async function submitToSheet(payload){
+      try{
+        await fetch(GAS_URL, {
+          method:'POST',
+          mode:'no-cors',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        return true;
+      }catch(e){
+        console.error('submitToSheet error', e);
+        return false;
+      }
+    }
+
+    /* Contact form (본문) */
+    const cf = document.getElementById('contactForm');
+    const fs = document.getElementById('formStatus');
+    if(cf && fs){
+      cf.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const payload = {
+          name: cf.name.value.trim(),
+          phone: cf.phone.value.trim(),
+          type: cf.type.value,
+          message: cf.message.value.trim()
+        };
+        const ok = await submitToSheet(payload);
+        fs.textContent = ok ? '접수 완료! 곧 연락드릴게요.' : '전송에 문제가 있어요. 잠시 후 다시 시도해주세요.';
+        cf.reset();
+      });
+    }
+
+    /* Reveal animations */
+    if ('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries, ob)=>{
+        entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); ob.unobserve(en.target);} });
+      }, {threshold:0.12});
+      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el=> el.classList.add('visible'));
+    }
+
+    /* Smooth scroll */
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        if(id && id.length>1){
+          const target = document.querySelector(id);
+          if (target){
+            e.preventDefault();
+            target.scrollIntoView({behavior:'smooth',block:'start'});
+            if (headerEl) headerEl.classList.remove('open');
+          }
+        }
+      });
+    });
+
+    /* ===== 상담 상태: 자동 캐러셀 ===== */
+    const statusTrack = document.getElementById('statusTrack');
+    let statusItems = [], statusTimer = null;
+
+    // JSONP 콜백
+    window.rwStatus = function(res){
+      if(!res || !res.ok) return;
+      statusItems = Array.isArray(res.items) ? res.items : [];
+      renderStatus();
+    };
+
+    function renderStatus(){
+      if (!statusTrack) return;
+      statusTrack.innerHTML = '';
+      let pool = statusItems.slice();
+      while (pool.length < 7 && statusItems.length > 0) pool = pool.concat(statusItems);
+      pool.forEach(addStatusRow);
+      startStatusSlide();
+    }
+
+    function addStatusRow(item){
+      const li = document.createElement('li');
+      li.className = 'status-item';
+      li.innerHTML = `
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span class="name">${item.name}</span>
+        <span class="state">${item.status}</span>
+      `;
+      statusTrack.appendChild(li);
+    }
+
+    function shiftOnce(trackEl){
+      if (!trackEl || trackEl.children.length <= 1) return;
+      const f = trackEl.children[0];
+      const s = trackEl.children[1] || f;
+      const shift = (s.getBoundingClientRect().left - f.getBoundingClientRect().left) || f.offsetWidth + 12;
+      trackEl.classList.add('slide-left');
+      trackEl.style.transform = `translateX(-${Math.round(shift)}px)`;
+      setTimeout(()=>{
+        trackEl.classList.remove('slide-left');
+        trackEl.style.transform = 'translateX(0)';
+        trackEl.appendChild(f);
+      }, 460);
+    }
+
+    function startStatusSlide(){
+      if (statusTimer) clearInterval(statusTimer);
+      if (statusTrack.children.length <= 2) return;
+      statusTimer = setInterval(()=>shiftOnce(statusTrack), 2600);
+    }
+
+    function fetchStatusJSONP(){
+      const prev = document.getElementById('jsonpStatus');
+      if (prev) prev.remove();
+      const s = document.createElement('script');
+      s.id = 'jsonpStatus';
+      s.src = `${GAS_URL}?action=list&callback=rwStatus&_=${Date.now()}`;
+      document.body.appendChild(s);
+    }
+    fetchStatusJSONP();
+    setInterval(fetchStatusJSONP, 60 * 1000);
+
+    /* ===== 포트폴리오: 상담 상태처럼 ‘흐르는’ 캐러셀 ===== */
+    const pTrack = document.getElementById('portfolioTrack');
+    let pTimer = null;
+
+    function startPortfolioSlide(){
+      if (!pTrack) return;
+      const children = pTrack.children;
+      if (children.length <= 1) return;
+      if (pTimer) clearInterval(pTimer);
+      pTimer = setInterval(()=>shiftOnce(pTrack), 3200);
+    }
+    startPortfolioSlide();
+
+    // 반응형 리사이즈 시 첫 요소 위치 재계산 보정
+    let rAf = null;
+    window.addEventListener('resize', ()=>{
+      if (rAf) cancelAnimationFrame(rAf);
+      rAf = requestAnimationFrame(()=>{
+        pTrack.style.transform = 'translateX(0)';
+      });
+    });
+
+  });
+  </script>
+</body>
+</html>
