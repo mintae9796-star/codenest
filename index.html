@@ -2,751 +2,287 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <!-- 반응형 -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CodeNest · 홈페이지 제작</title>
-  <meta name="description" content="템플릿형부터 맞춤형까지, 반응형 홈페이지를 고급스럽게 제작합니다." />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>CodeNest · 메인 헤더 v5 (라이트/아이콘 수정)</title>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
-
   <style>
     :root{
-      --brand:#000000;
-      --brand-grad:linear-gradient(135deg,#4c4c4d,#000000);
-      --ink:#0b1220;
-      --sub:#586272;
-      --bg:#ffffff;
-      --muted:#f6f8fe;
-      --line:#e7ebf4;
-      --radius:18px;
-      --shadow:0 10px 30px rgba(8,15,35,.10);
-      --shadow-sm:0 4px 16px rgba(8,15,35,.06);
-      --container:1140px;
+      /* Light theme */
+      --bg:#F7F9FC; --fg:#0B1220; --muted:#5A6478; 
+      --brand:#2b5cff; --brand2:#4FA3FF; /* 포인트 블루는 소량만 사용 */
+      --card:#FFFFFF; --line:#E6EAF2; --shadow:0 6px 24px rgba(16,24,40,.06);
     }
-
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:"Pretendard",system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,sans-serif;color:var(--ink);background:var(--bg)}
-    img{display:block;max-width:100%;height:auto}
-    a{color:inherit;text-decoration:none}
-    .container{width:100%;max-width:var(--container);margin:0 auto;padding:0 20px}
+    body{margin:0; font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,"Apple SD Gothic Neo","Noto Sans KR",Arial; color:var(--fg); background:var(--bg)}
+    a{color:inherit; text-decoration:none}
 
-    /* Buttons */
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1px solid transparent;border-radius:999px;padding:.85rem 1.1rem;font-weight:700;cursor:pointer;transition:.18s}
-    .btn:focus{outline:2px solid #5b8def33;outline-offset:2px}
-    .btn-primary{background:var(--brand-grad);color:#fff;box-shadow:0 8px 24px rgba(91,141,239,.32)}
-    .btn-primary:hover{filter:brightness(.97)}
-    .btn-ghost{background:#fff;border-color:var(--line)}
-    .btn-ghost:hover{background:#f8f9ff}
+/* Header */
+header{position:fixed; top:0; left:0; width:100%; z-index:60; background:transparent; transition:background-color .25s, box-shadow .25s, border-color .25s}
+header.scrolled{background:#fff; box-shadow:var(--shadow); border-bottom:1px solid var(--line)}
+.nav{display:flex; align-items:center; justify-content:space-between; height:76px; padding:0 20px}
+.brand img{height:50px; display:block}
 
-    /* Header */
-    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
-    .nav{display:flex;align-items:center;justify-content:space-between;min-height:68px}
-    .logo{display:flex;align-items:center;gap:.7rem;font-weight:900}
-    .logo img{height:44px;width:auto}
-    nav ul{display:flex;gap:1.25rem;list-style:none;margin:0;padding:0}
-    nav ul li a{font-weight:700}
-    .cta{display:flex;gap:.75rem;align-items:center}
-    .hamburger{display:none}
 
-    /* Mobile Nav */
-    @media (max-width:960px){
-      .hamburger{
-        display:inline-flex;align-items:center;justify-content:center;
-        width:40px;height:40px;border-radius:10px;
-        background:var(--brand-grad);color:#fff;font-size:20px;border:none
-      }
-      nav ul{display:none}
-      header.open nav ul{
-        display:flex;position:absolute;top:68px;left:0;right:0;
-        padding:16px;background:#fff;border-bottom:1px solid var(--line);flex-direction:column
-      }
-    }
+.menu{display:flex; gap:28px; align-items:center; font-weight:700}
+.menu a{position:relative; color:#fff; opacity:.92; padding:4px 0; transition:color .25s}
+header.scrolled .menu a{color:#0B1220}
+.menu a:hover{opacity:1}
+.menu a.active:after, .menu a:hover:after{content:""; position:absolute; left:0; right:0; bottom:-8px; height:2px; background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.cta{padding:10px 14px; border-radius:12px; font-weight:900; border:1px solid rgba(255,255,255,.6); color:#fff; background:transparent; transition:all .25s}
+header.scrolled .cta{border:1px solid var(--line); background:#fff; color:#0B1220}
+.cta.primary{background:var(--brand); color:#fff; border-color:transparent}
+header.scrolled .cta.primary{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#fff}
 
-    /* Hero */
-    .hero{padding:108px 0 92px;background:linear-gradient(180deg,#f7f9ff 0%,#fff 100%)}
-    .hero-inner{max-width:780px;margin:0 auto;text-align:center}
-    .hero h1{font-size:clamp(30px,5vw,58px);line-height:1.1;margin:0 0 14px;font-weight:900;background:var(--brand-grad);background-clip:text;-webkit-text-fill-color:transparent}
-    .subtitle{font-size:1.12rem;color:var(--sub);margin:0 0 28px}
-    .hero .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-    /* Section */
-    section{padding:84px 0;border-top:1px solid var(--line)}
-    section.alt{background:var(--muted)}
-    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
-    h2{font-size:clamp(22px,3.2vw,34px);margin:0;font-weight:900;letter-spacing:-.01em}
-    .section-desc{color:var(--sub)}
+/* Icons */
+.icon{width:26px; height:26px; display:inline-block}
+.icon svg{width:100%; height:100%; stroke:#fff; transition:stroke .25s}
+header.scrolled .icon svg{stroke:#0B1220}
 
-    /* Grids & Cards */
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-    @media (max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:760px){
-      .grid-4{grid-template-columns:1fr}
-      .grid-3{grid-template-columns:1fr 1fr}
-      .grid-2{grid-template-columns:1fr} /* 모바일에서 세로 스택 (폼 → 연락처) */
-    }
-    @media (max-width:560px){ .grid-3{grid-template-columns:1fr} }
-    .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
-    .card h3{margin:0 0 8px;font-size:1.15rem}
-    .service-card{text-align:center}
-    .service-card .icon{font-size:42px;margin-bottom:10px}
+    /* Mobile overlay (light) */
+    .hamb{display:none}
+    @media(max-width:860px){ .menu{display:none} .hamb{display:flex; align-items:center} }
+    .overlay{position:fixed; inset:0; background:#fff; color:#0B1220; transform:translateY(-100%); transition:transform .28s ease; z-index:100; border-bottom:1px solid var(--line)}
+    .overlay.open{transform:none}
+    .overlay .panel{padding:18px 20px 28px}
+    .overlay .toprow{display:flex; align-items:center; justify-content:space-between; height:56px}
+    .overlay .logo img{height:40px}
+    .overlay .close{background:none; border:0; color:#0B1220; padding:8px}
+    .overlay nav{margin-top:8px; padding:20px;}
+    .m-item{display:flex; align-items:center; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--line); font-weight:700}
+    .m-item .arrow{opacity:.7}
+    .m-section{margin-top:14px; color:#667085; font-size:13px; letter-spacing:.2px}
+    .m-sub{padding:12px 0; border-bottom:1px solid var(--line)}
+    .m-sub a{display:block; padding:8px 0; color:#0B1220; font-weight:600}
+    .overlay .bottom{padding-top:18px}
+    .badge{display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:12px; background:#00C73C; color:#fff; font-weight:800}
 
-    /* Portfolio (카드 기본) */
-    .folio{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--line);background:#eef3f9}
-    .folio .cover{aspect-ratio:16/10;background:linear-gradient(135deg,#e6eef8,#f5f7fb)}
-    .folio .meta{position:absolute;inset:auto 0 0 0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 100%);color:#fff;padding:14px 16px;font-size:.95rem}
-    .badge{display:inline-block;font-size:.8rem;background:#eef2ff;color:#272a6e;padding:.25rem .6rem;border-radius:999px;margin-right:.4rem}
+/* Hero with background image */
+.hero{position:relative; display:grid; place-items:center; min-height:100vh; background:transparent; background-image:var(--hero-img, none); background-size:cover; background-position:var(--hero-pos, center); background-repeat:no-repeat}
+.hero::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,.4)}
+.hero .inner{position:relative; z-index:1; max-width:980px; margin:0 auto; text-align:center; color:#fff; padding-top:var(--header-h)}
+.eyebrow{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid rgba(255,255,255,.5); border-radius:999px; font-size:12px; color:#fff; background:rgba(0,0,0,.25)}
+h1{font-size:clamp(36px,7.2vw,64px); line-height:1.08; margin:16px 0 8px; text-align:center; color:#fff}
+h1 span{background:linear-gradient(90deg,#fff,#E6F0FF); -webkit-background-clip:text; background-clip:text; color:transparent}
+.sub{max-width:860px; margin:0 auto; color:#E6E9F2}
+.ghost{padding:10px 14px; border-radius:12px; font-weight:900; border:1px solid rgba(255,255,255,.45); background:transparent; color:#fff}
+.row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; justify-content:center}
+.scroll-indicator{position:absolute; left:50%; bottom:18px; transform:translateX(-50%); color:#fff; font-size:12px; display:flex; flex-direction:column; align-items:center; gap:6px}
+.scroll-indicator svg{width:18px; height:18px; animation:bounce 1.6s infinite; stroke:#fff}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-    /* Pricing (tiles) */
-    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-    .plan{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
-    .plan-head{padding:22px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,#f5f8ff,#ffffff)}
-    .plan-head.simple{background:linear-gradient(180deg,#eef4ff,#ffffff)}
-    .plan-head.business{background:linear-gradient(180deg,#ecf7ff,#ffffff)}
-    .plan-head.premium{background:linear-gradient(180deg,#fff3d6,#ffffff)}
-    .plan-head h3{margin:0;font-size:1.2rem}
-    .price-line{font-size:1.15rem;font-weight:900}
-    .price-line .muted{color:#64748b;font-weight:600}
-    .badge-lite{display:inline-block;padding:.25rem .55rem;border-radius:999px;background:#eaf0ff;color:#22338c;font-size:.78rem;font-weight:900}
-    .badge-lite.best{background:#def7ea;color:#0b7a52}
-    .plan-meta{padding:10px 22px;color:#64748b;border-top:1px dashed var(--line)}
-    .plan-body{display:grid;grid-template-columns:1fr;gap:10px;padding:16px 22px}
-    .feat{display:flex;align-items:center;gap:.6rem}
-    .feat .ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#f1f5f9}
-    .plan-note{padding:10px 22px;color:#94a3b8;border-top:1px solid var(--line);font-size:.9rem}
-    @media (max-width:1024px){ .plans{grid-template-columns:1fr 1fr} }
-    @media (max-width:760px){ .plans{grid-template-columns:1fr} }
 
-    /* Reveal animation */
-    .reveal{opacity:0;transform:translateY(24px);transition:.5s ease}
-    .reveal.visible{opacity:1;transform:none}
+/* Mobile-specific hero background override */
+@media(max-width:860px){
+.hero{ background-image:var(--hero-img-mobile, var(--hero-img, none)); background-position:var(--hero-pos-mobile, var(--hero-pos, center)); }
+}
 
-    /* Contact (본문 폼) */
-    form{display:grid;gap:12px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:560px){ .row{grid-template-columns:1fr} }
-    label{font-weight:700;font-size:.95rem}
-    input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;font:inherit}
-    textarea{min-height:110px;resize:vertical}
+/* 강조 키워드 */
+.highlight {
+  font-weight: 800;
+}
 
-    /* Footer */
-    footer{padding:56px 0;border-top:1px solid #1b1f33;background:#0c1220;color:#c6d0e1}
-    footer a{color:#e6edf7}
-    .footgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+/* 애니메이션 텍스트 */
+.animated-words {
+  display:inline-block;
+  overflow:hidden;
+  height:1.2em;
+  vertical-align:bottom;
+  color: var(--brand2);
+  font-weight:900;
+  position:relative;
+  background:#0B1220;
+  border: 1px solid #0B1220;
+  border-radius: 30px;
+  padding-left:15px;
+  padding-right:15px;
+}
+.animated-words span {
+  display:block;
+  line-height:1.2em;
+  animation: slideWords 12s infinite;
+}
+@keyframes slideWords {
+  0%, 20%   { transform:translateY(0); }
+  25%, 45%  { transform:translateY(-100%); }
+  50%, 70%  { transform:translateY(-200%); }
+  75%, 95%  { transform:translateY(-300%); }
+  100%      { transform:translateY(0); }
+}
 
-    /* ===== 실시간 상담 상태: 가로 캐러셀 ===== */
-    .status-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm)}
-    .status-viewport{overflow:hidden;border-radius:16px;min-height:86px}
-    .status-track{
-      list-style:none;margin:0;padding:12px;
-      display:grid;grid-auto-flow:column;gap:12px;align-items:stretch;
-      grid-auto-columns:calc((100% - 12px*6)/7);
-      will-change:transform;
-    }
-    .status-item{
-      display:flex;align-items:center;gap:10px;
-      padding:14px 16px;border:1px solid var(--line);border-radius:14px;
-      background:#fff;box-shadow:var(--shadow-sm);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    }
-    .badge-dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,#4c4c4d,#000000);box-shadow:0 0 0 4px #5b8def22;flex:none}
-    .name{font-weight:900}
-    .state{color:#475569;font-weight:700}
-    .slide-left{transition:transform .45s ease}
-    @media (max-width:1200px){.status-track{grid-auto-columns:calc((100% - 12px*4)/5)}}
-    @media (max-width:900px){.status-track{grid-auto-columns:calc((100% - 12px*2)/3)}}
-    @media (max-width:560px){.status-track{grid-auto-columns:100%}}
-
-    /* ===== 포트폴리오: 흐르는 캐러셀 ===== */
-    .portfolio-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm)}
-    .portfolio-viewport{overflow:hidden;border-radius:16px}
-    .portfolio-track{
-      list-style:none;margin:0;padding:12px;
-      display:grid;grid-auto-flow:column;gap:12px;align-items:stretch;
-      grid-auto-columns:calc((100% - 12px*2)/3); /* 데스크탑 3칸 */
-      will-change:transform;
-    }
-    .portfolio-item{height:100%}
-    .portfolio-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#eef3f9;height:100%}
-    .portfolio-card .cover{aspect-ratio:16/10;background:linear-gradient(135deg,#e6eef8,#f5f7fb)}
-    .portfolio-card .meta{padding:12px 14px;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 100%);color:#fff;font-size:.95rem}
-    @media (max-width:1024px){.portfolio-track{grid-auto-columns:calc((100% - 12px)/2)}} /* 태블릿 2칸 */
-    @media (max-width:560px){.portfolio-track{grid-auto-columns:100%}} /* 모바일 1칸 */
-
-    /* ===== 블로그: 데스크톱 그리드 / 모바일 1장 슬라이드 ===== */
-    .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-    @media (max-width:900px){.blog-grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:560px){.blog-grid{display:none}} /* 모바일에서는 그리드 숨김 */
-
-    .blog-slider{display:none}
-    @media (max-width:560px){.blog-slider{display:block}}
-    .blog-viewport{overflow:hidden;border-radius:16px}
-    .blog-track{
-      list-style:none;margin:0;padding:0;
-      display:grid;grid-auto-flow:column;gap:12px;align-items:stretch;
-      grid-auto-columns:100%;
-      will-change:transform;
-    }
-    .blog-item{padding:0} /* 간격은 gap으로 처리 */
-    .blog-dots{text-align:center;margin-top:12px}
-    .blog-dots button{width:8px;height:8px;border-radius:50%;margin:0 4px;border:none;background:#cbd5e1;cursor:pointer}
-    .blog-dots button.active{background:var(--brand)}
-
-    /* ===== 플로팅 소셜 버튼 (우하단) ===== */
-    .side-tab{
-      position:fixed;right:18px;bottom:18px;z-index:80;
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .side-tab a.btn{min-width:120px;justify-content:flex-start}
-    /* 모바일 축소 버전 */
-    @media (max-width:560px){
-      .side-tab{right:12px;bottom:12px;gap:8px}
-      .side-tab a.btn{
-        min-width:auto;
-        padding:.56rem .72rem;
-        font-size:.92rem;
-        border-radius:12px;
-        gap:.4rem;
-      }
-    }
-  </style>
+/* 칩 스타일 */
+.chips {
+  margin:18px auto;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.chips span {
+  font-size:13px;
+  font-weight:700;
+  padding:6px 12px;
+  border-radius:20px;
+  background:rgb(255, 255, 255);
+  border:1px solid var(--line);
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+  color:#0B1220;
+}
+</style>
 </head>
-
 <body>
-  <!-- Header -->
-  <header id="siteHeader">
-    <div class="container nav">
-      <a class="logo" href="#home" aria-label="CodeNest Home">
-        <img src="logo.png" alt="CodeNest 로고">
+  <header id="siteHeader" aria-label="사이트 헤더">
+    <div class="nav">
+      <a href="#" class="brand" aria-label="CodeNest 홈">
+        <img id="logoImg"
+     src="logo.png"
+     data-logo-dark="logo.png"
+     data-logo-light="logo3.png"
+     alt="CodeNest 로고">
       </a>
-      <nav>
-        <button class="hamburger" id="navToggle" aria-label="Menu">☰</button>
-        <ul>
-          <li><a href="#services">서비스</a></li>
-          <li><a href="#portfolio">포트폴리오</a></li>
-          <li><a href="#pricing">가격안내</a></li>
-          <li><a href="#blog">블로그</a></li>
-          <li><a href="#contact">상담문의</a></li>
-        </ul>
+      <nav class="menu" aria-label="주요 메뉴">
+        <a href="#about" class="active">회사소개</a>
+        <a href="#services">서비스</a>
+        <a href="#portfolio">포트폴리오</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="cta primary" style="padding:10px 14px;">문의하기</a>
       </nav>
-      <div class="cta"><a class="btn btn-primary" href="#contact">무료 상담</a></div>
+      <div class="hamb">
+        <button id="openNav" aria-controls="mobileMenu" aria-expanded="false" aria-haspopup="true" aria-label="모바일 메뉴 열기" style="background:none; border:0; padding:6px;">
+          <span class="icon" aria-hidden="true">
+            <!-- 햄버거 SVG -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero" id="home">
-    <div class="container">
-      <div class="hero-inner">
-        <h1>고객 비즈니스를 돋보이게 하는<br>프리미엄 홈페이지</h1>
-        <p class="subtitle">CodeNest는 디자인과 기술을 결합해 신뢰와 성과를 만드는 웹사이트를 제공합니다.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#contact">상담 받기</a>
-          <a class="btn btn-ghost" href="#portfolio">포트폴리오 보기</a>
+  <!-- Mobile Fullscreen Overlay (Light) -->
+  <div id="mobileMenu" class="overlay" role="dialog" aria-modal="true" aria-label="모바일 전체 메뉴">
+    <div class="panel">
+      <div class="toprow">
+        <div class="logo"><img src="logo.png" alt="CodeNest"></div>
+        <button id="closeNav" class="close" aria-label="닫기">
+          <span class="icon" aria-hidden="true">
+            <!-- X 아이콘 SVG -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+          </span>
+        </button>
+      </div>
+      <nav>
+        <a class="m-item" href="#contact">문의하기 <span class="arrow">↗</span></a>
+        <a class="m-item" href="#about">회사소개 <span class="arrow">↗</span></a>
+        <a class="m-item" href="#portfolio">포트폴리오 <span class="arrow">↗</span></a>
+        <a class="m-item" href="#column">칼럼 <span class="arrow">↗</span></a>
+        <a class="m-item" href="#faq">FAQ <span class="arrow">↗</span></a>
+
+        <div class="m-section">서비스 소개</div>
+        <div class="m-sub">
+          <a href="#svc-gov">정부 지원 홈페이지 제작</a>
+          <a href="#svc-landing">랜딩페이지 제작</a>
+          <a href="#svc-app">앱 개발</a>
+          <a href="#svc-service">서비스 개발</a>
         </div>
+      </nav>
+      <div class="bottom">
+        <a class="badge" href="#blog" aria-label="네이버 블로그">blog</a>
       </div>
     </div>
-  </section>
-
-  <!-- Services -->
-  <section id="services" class="alt">
-    <div class="container">
-      <div class="section-head">
-        <h2>서비스</h2>
-        <p class="section-desc">원하는 방식에 따라 선택하세요.</p>
-      </div>
-      <div class="grid-4">
-        <article class="card service-card reveal">
-          <div class="icon">⚡</div>
-          <h3>템플릿형</h3>
-          <p>빠른 제작 · 합리적인 가격 · 반응형 기본 제공</p>
-          <a href="#contact" class="btn btn-primary">견적 받기</a>
-        </article>
-        <article class="card service-card reveal">
-          <div class="icon">🎨</div>
-          <h3>맞춤형</h3>
-          <p>브랜드 맞춤 디자인 · 특수 기능 & 커스터마이징</p>
-          <a href="#contact" class="btn btn-ghost">상담 요청</a>
-        </article>
-        <article class="card service-card reveal">
-          <div class="icon">🛒</div>
-          <h3>쇼핑몰 구축</h3>
-          <p>상품/결제/배송 연동 · 프로모션 배너 · GA4 전환추적</p>
-          <a href="#contact" class="btn btn-ghost">상담 요청</a>
-        </article>
-        <article class="card service-card reveal">
-          <div class="icon">🔧</div>
-          <h3>유지보수 · 운영</h3>
-          <p>콘텐츠 수정 · 배너 교체 · 보안 패치 · 속도 최적화</p>
-          <a href="#contact" class="btn btn-ghost">문의하기</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Portfolio: 흐르는 캐러셀 -->
-  <section id="portfolio">
-    <div class="container">
-      <div class="section-head">
-        <h2>포트폴리오</h2>
-        <p class="section-desc">실제 작업물을 통해 퀄리티를 확인하세요.</p>
-      </div>
-
-      <div class="portfolio-wrap">
-        <div class="portfolio-viewport">
-          <ul class="portfolio-track" id="portfolioTrack" aria-live="polite">
-            <li class="portfolio-item">
-              <article class="portfolio-card folio reveal">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="meta"><span class="badge">템플릿</span> 카페 홈페이지 · 메뉴/오시는길/문의</div>
-              </article>
-            </li>
-            <li class="portfolio-item">
-              <article class="portfolio-card folio reveal">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="meta"><span class="badge">맞춤형</span> 의원 홈페이지 · 예약/의료진/진료안내</div>
-              </article>
-            </li>
-            <li class="portfolio-item">
-              <article class="portfolio-card folio reveal">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="meta"><span class="badge">템플릿</span> 학원 홈페이지 · 수강신청/공지/상담</div>
-              </article>
-            </li>
-            <li class="portfolio-item">
-              <article class="portfolio-card folio reveal">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="meta"><span class="badge">맞춤형</span> 건설사 랜딩 · 상담/현장사례/견적</div>
-              </article>
-            </li>
-            <li class="portfolio-item">
-              <article class="portfolio-card folio reveal">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="meta"><span class="badge">템플릿</span> 스튜디오 · 갤러리/예약/리뷰</div>
-              </article>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="alt">
-    <div class="container">
-      <div class="section-head">
-        <h2>숨겨진 비용 없이 투명하게</h2>
-        <p class="section-desc">업계 표준을 바탕으로 패키지를 명확히 안내합니다.</p>
-      </div>
-
-      <div class="plans reveal" id="plansMount">
-        <article class="plan">
-          <div class="plan-head simple">
-            <div class="badge-lite">SIMPLE</div>
-            <h3>심플 X 홈페이지</h3>
-            <div class="price-line">₩1,500,000 ~ <span class="muted">/ 3주</span></div>
-            <a href="#contact" class="btn btn-primary">문의하기</a>
-          </div>
-          <div class="plan-meta">메인 1 page + 서브 5 page</div>
-          <div class="plan-body">
-            <div class="feat"><span class="ico">🖼️</span> 메인/서브 기본 디자인</div>
-            <div class="feat"><span class="ico">📱</span> 반응형(모바일, 태블릿)</div>
-            <div class="feat"><span class="ico">✉️</span> 기본 문의 폼</div>
-            <div class="feat"><span class="ico">⚙️</span> 기본 SEO/OG 설정</div>
-          </div>
-          <div class="plan-note">* 이미지/텍스트는 제공 자료 기준</div>
-        </article>
-
-        <article class="plan">
-          <div class="plan-head business">
-            <div class="badge-lite best">BUSINESS · BEST</div>
-            <h3>최적 K 홈페이지</h3>
-            <div class="price-line">₩2,200,000 ~ <span class="muted">/ 4주</span></div>
-            <a href="#contact" class="btn btn-primary">문의하기</a>
-          </div>
-          <div class="plan-meta">메인 1 page + 서브 10 page</div>
-          <div class="plan-body">
-            <div class="feat"><span class="ico">🧭</span> GA4/서치콘솔 연동</div>
-            <div class="feat"><span class="ico">⚡</span> 이미지/WebP 속도 최적화</div>
-            <div class="feat"><span class="ico">🧰</span> 섹션/레이아웃 커스텀</div>
-            <div class="feat"><span class="ico">🔒</span> 보안/스팸 방지 설정</div>
-          </div>
-          <div class="plan-note">* 필요 기능은 옵션으로 확장 가능</div>
-        </article>
-
-        <article class="plan">
-          <div class="plan-head premium">
-            <div class="badge-lite">PREMIUM</div>
-            <h3>맞춤 Z 홈페이지</h3>
-            <div class="price-line">₩3,000,000 ~ <span class="muted">/ 5주</span></div>
-            <a href="#contact" class="btn btn-ghost">상담 요청</a>
-          </div>
-          <div class="plan-meta">메인 1 page + 서브 15 page</div>
-          <div class="plan-body">
-            <div class="feat"><span class="ico">🧩</span> 맞춤 인터랙션/모션</div>
-            <div class="feat"><span class="ico">👥</span> 회원/예약/결제 연동</div>
-            <div class="feat"><span class="ico">🌐</span> 다국어/글로벌 SEO</div>
-            <div class="feat"><span class="ico">🛠️</span> 장기 유지보수/확장</div>
-          </div>
-          <div class="plan-note">* 요구사항에 따라 기간/비용 변동</div>
-        </article>
-      </div>
-
-      <div class="section-desc" style="margin-top:10px">모든 가격은 부가세 별도입니다.</div>
-    </div>
-  </section>
-
-  <!-- Blog: 데스크톱 그리드 / 모바일 슬라이드 -->
-  <section id="blog">
-    <div class="container">
-      <div class="section-head">
-        <h2>블로그</h2>
-        <p class="section-desc">제작 팁과 운영 노하우를 공유합니다.</p>
-      </div>
-
-      <!-- 데스크톱/태블릿: 그리드 -->
-      <div class="blog-grid">
-        <article class="card post reveal">
-          <h3>카페 사장님을 위한 홈페이지 가이드</h3>
-          <p class="section-desc">메뉴/지도/문의폼 중심으로 구성하는 팁</p>
-        </article>
-        <article class="card post reveal">
-          <h3>네이버에 잘 뜨는 구조란?</h3>
-          <p class="section-desc">메타태그/OG/구조화데이터 체크리스트</p>
-        </article>
-        <article class="card post reveal">
-          <h3>모바일 퍼스트 반응형 설계</h3>
-          <p class="section-desc">그리드/타이포/이미지 최적화</p>
-        </article>
-      </div>
-
-      <!-- 모바일: 1장 슬라이드 -->
-      <div class="blog-slider">
-        <div class="blog-viewport">
-          <ul class="blog-track" id="blogTrack" aria-live="polite">
-            <li class="blog-item">
-              <article class="card post">
-                <h3>카페 사장님을 위한 홈페이지 가이드</h3>
-                <p class="section-desc">메뉴/지도/문의폼 중심으로 구성하는 팁</p>
-              </article>
-            </li>
-            <li class="blog-item">
-              <article class="card post">
-                <h3>네이버에 잘 뜨는 구조란?</h3>
-                <p class="section-desc">메타태그/OG/구조화데이터 체크리스트</p>
-              </article>
-            </li>
-            <li class="blog-item">
-              <article class="card post">
-                <h3>모바일 퍼스트 반응형 설계</h3>
-                <p class="section-desc">그리드/타이포/이미지 최적화</p>
-              </article>
-            </li>
-          </ul>
-        </div>
-        <div class="blog-dots" id="blogDots" aria-hidden="true"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Status Ticker -->
-  <section id="status" class="alt">
-    <div class="container">
-      <div class="section-head">
-        <h2>실시간 상담 상태</h2>
-        <p class="section-desc">가장 최근 접수부터 순서대로 보여드립니다.</p>
-      </div>
-
-      <div class="status-wrap">
-        <div class="status-viewport">
-          <ul id="statusTrack" class="status-track" aria-live="polite"></ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="alt">
-    <div class="container">
-      <div class="section-head">
-        <h2>상담 / 견적 요청</h2>
-        <p class="section-desc">연락처를 남겨주시면 빠르게 회신드릴게요.</p>
-      </div>
-      <div class="grid-2">
-        <!-- 폼이 먼저, 모바일에서 위쪽에 배치됨 -->
-        <form id="contactForm">
-          <div class="row">
-            <div>
-              <label for="name">이름</label>
-              <input id="name" name="name" required />
-            </div>
-            <div>
-              <label for="phone">연락처</label>
-              <input id="phone" name="phone" placeholder="010-0000-0000" required />
-            </div>
-          </div>
-          <label for="type">제작 유형</label>
-          <select id="type" name="type">
-            <option>템플릿형</option>
-            <option>맞춤형</option>
-            <option>상담 후 결정</option>
-          </select>
-          <label for="message">요청사항</label>
-          <textarea id="message" name="message" placeholder="업종/기능/예산/참고사이트 등을 적어주세요."></textarea>
-          <div class="cta">
-            <button type="submit" class="btn btn-primary">보내기</button>
-            <button type="reset" class="btn btn-ghost">초기화</button>
-          </div>
-          <p id="formStatus" class="section-desc" role="status" aria-live="polite"></p>
-        </form>
-
-        <!-- 연락처 박스: 모바일에서 폼 아래로 자동 이동 -->
-        <aside class="card">
-          <h3 style="margin:0 0 6px 0">연락처</h3>
-          <p class="section-desc">영업시간: 평일 10:00 ~ 18:00</p>
-          <ul class="section-desc" style="margin:0 0 10px 18px">
-            <li>이메일: codenest0308@gmail.com</li>
-            <li>카카오톡 오픈채팅: <a href="https://open.kakao.com/o/sU9RvTUh">@codenest</a></li>
-            <li>전화: 010-5949-2945</li>
-          </ul>
-          <p class="section-desc">방문 상담은 예약제로 운영됩니다.</p>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container footgrid">
-      <div>
-        <div class="logo" style="margin-bottom:10px">
-          <img src="logo3.png" alt="CodeNest 로고">
-        </div>
-        <div class="section-desc">© <span id="year"></span> CodeNest. All rights reserved.</div>
-      </div>
-      <div style="text-align:right">
-        <div class="section-desc">사업자등록번호: 000-00-00000</div>
-        <div class="section-desc">주소: 서울특별시 중랑구 동일로 000</div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- 플로팅 소셜 버튼 -->
-  <div class="side-tab" aria-label="빠른 바로가기">
-    <a class="btn btn-primary" href="https://open.kakao.com/o/sU9RvTUh" target="_blank" rel="noopener" aria-label="카카오톡 오픈채팅으로 이동">💬 카카오톡</a>
-    <a class="btn btn-primary" href="https://www.instagram.com/youraccount" target="_blank" rel="noopener" aria-label="인스타그램으로 이동">📷 인스타그램</a>
-    <a class="btn btn-primary" href="https://blog.naver.com/yourblog" target="_blank" rel="noopener" aria-label="네이버 블로그로 이동">✍ 블로그</a>
   </div>
 
+<section class="hero"
+  style="
+    --hero-img: url('hero.jpg');
+    --hero-img-mobile: url('hero-mobile.jpg');     /* 모바일 전용 */
+    --hero-pos: center;                            /* 데스크톱 포커스(선택) */
+    --hero-pos-mobile: center 30%;                 /* 모바일 포커스(선택) */
+  "
+>
+  <div class="inner">
+    <!-- 2단 문구 구조 -->
+    <h1>
+      <span class="highlight">작은 기업도 큰 신뢰를</span><br>
+      <span class="animated-words">
+        <span>랜딩페이지</span>
+        <span>기업형 홈페이지</span>
+        <span>자사몰</span>
+        <span>서비스 플랫폼</span>
+      </span>
+      제작
+    </h1>
+    <p class="sub">합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다.</p>
+
+    <!-- 칩(Chip) 스타일 -->
+    <div class="chips">
+      <span>🚀 빠른 제작</span>
+      <span>💡 합리적 비용</span>
+      <span>📈 SEO 최적화</span>
+    </div>
+
+    <!-- CTA 버튼 -->
+    <div class="row">
+      <a href="#contact" class="cta primary">문의하기</a>
+      <a href="#portfolio" class="ghost">포트폴리오 보기</a>
+    </div>
+  </div>
+      <div class="scroll-indicator" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      <span>Scroll</span>
+    </div>
+</section>
+
+zz
   <script>
-  /* === Apps Script 웹앱 URL (형이 넣어둔 값 유지) === */
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxjtXhqHaaxDx2CQ7wiJQiWw0TmZ34IchRoSrqjzaxOwVLyqJYTwPW3K3a8zS1TSiKE-w/exec";
+    // Header shadow on scroll
+    const header = document.getElementById('siteHeader');
+function onScroll(){
+  const top = window.scrollY || window.pageYOffset;
+  const atTop = top < 10;
+  header.classList.toggle('scrolled', !atTop);
+  header.classList.toggle('on-hero', atTop);
 
-  document.addEventListener('DOMContentLoaded', ()=>{
-    /* Year */
-    const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  // 로고 자동 스왑
+  const logo = document.getElementById('logoImg');
+  if(logo){
+    const dark = logo.getAttribute('data-logo-dark');
+    const light = logo.getAttribute('data-logo-light');
+    if(light){ logo.src = atTop ? light : (dark || logo.src); }
+  }
+}
+    window.addEventListener('scroll', onScroll); onScroll();
 
-    /* Mobile nav toggle */
-    const headerEl = document.getElementById('siteHeader');
-    const navToggle = document.getElementById('navToggle');
-    if (navToggle && headerEl) navToggle.addEventListener('click', ()=> headerEl.classList.toggle('open'));
+    // Mobile overlay menu
+    const menu = document.getElementById('mobileMenu');
+    const openBtn = document.getElementById('openNav');
+    const closeBtn = document.getElementById('closeNav');
 
-    /* ====== 스프레드시트로 전송 (공통 함수) ====== */
-    async function submitToSheet(payload){
-      try{
-        await fetch(GAS_URL, {
-          method:'POST',
-          mode:'no-cors',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify(payload)
-        });
-        return true;
-      }catch(e){
-        console.error('submitToSheet error', e);
-        return false;
-      }
-    }
+    function openMenu(){ menu.classList.add('open'); openBtn?.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ menu.classList.remove('open'); openBtn?.setAttribute('aria-expanded','false'); }
 
-    /* Contact form (본문) */
-    const cf = document.getElementById('contactForm');
-    const fs = document.getElementById('formStatus');
-    if(cf && fs){
-      cf.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const payload = {
-          name: cf.name.value.trim(),
-          phone: cf.phone.value.trim(),
-          type: cf.type.value,
-          message: cf.message.value.trim()
-        };
-        const ok = await submitToSheet(payload);
-        fs.textContent = ok ? '접수 완료! 곧 연락드릴게요.' : '전송에 문제가 있어요. 잠시 후 다시 시도해주세요.';
-        cf.reset();
-      });
-    }
-
-    /* Reveal animations */
-    if ('IntersectionObserver' in window){
-      const io = new IntersectionObserver((entries, ob)=>{
-        entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); ob.unobserve(en.target);} });
-      }, {threshold:0.12});
-      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
-    } else {
-      document.querySelectorAll('.reveal').forEach(el=> el.classList.add('visible'));
-    }
-
-    /* Smooth scroll */
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const id = a.getAttribute('href');
-        if(id && id.length>1){
-          const target = document.querySelector(id);
-          if (target){
-            e.preventDefault();
-            target.scrollIntoView({behavior:'smooth',block:'start'});
-            if (headerEl) headerEl.classList.remove('open');
-          }
-        }
-      });
+    openBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); openMenu(); });
+    closeBtn?.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMenu(); });
+    document.addEventListener('click', (e)=>{
+      const isInside = menu.contains(e.target) || openBtn.contains(e.target);
+      if(!isInside) closeMenu();
     });
 
-    /* ===== 공용: 한 칸 왼쪽으로 이동 후 첫 요소를 맨 뒤로 ===== */
-    function shiftOnce(trackEl){
-      if (!trackEl || trackEl.children.length <= 1) return;
-      const f = trackEl.children[0];
-      const s = trackEl.children[1] || f;
-      const shift = (s.getBoundingClientRect().left - f.getBoundingClientRect().left) || f.offsetWidth + 12;
-      trackEl.classList.add('slide-left');
-      trackEl.style.transform = `translateX(-${Math.round(shift)}px)`;
-      setTimeout(()=>{
-        trackEl.classList.remove('slide-left');
-        trackEl.style.transform = 'translateX(0)';
-        trackEl.appendChild(f);
-      }, 460);
+    // === Full-height hero helpers ===
+    // 모바일 브라우저 주소창에 의한 100vh 오류 보정
+    function setVH(){
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
-
-    /* ===== 상담 상태: 자동 캐러셀 ===== */
-    const statusTrack = document.getElementById('statusTrack');
-    let statusItems = [], statusTimer = null;
-
-    // JSONP 콜백
-    window.rwStatus = function(res){
-      if(!res || !res.ok) return;
-      statusItems = Array.isArray(res.items) ? res.items : [];
-      renderStatus();
-    };
-
-    function renderStatus(){
-      if (!statusTrack) return;
-      statusTrack.innerHTML = '';
-      let pool = statusItems.slice();
-      while (pool.length < 7 && statusItems.length > 0) pool = pool.concat(statusItems);
-      pool.forEach(item=>{
-        const li = document.createElement('li');
-        li.className = 'status-item';
-        li.innerHTML = `
-          <span class="badge-dot" aria-hidden="true"></span>
-          <span class="name">${item.name}</span>
-          <span class="state">${item.status}</span>
-        `;
-        statusTrack.appendChild(li);
-      });
-      startStatusSlide();
+    // 실제 헤더 높이를 읽어 --header-h에 반영
+    function setHeaderH(){
+      const h = document.getElementById('siteHeader')?.offsetHeight || 76;
+      document.documentElement.style.setProperty('--header-h', h + 'px');
     }
+    setVH(); setHeaderH();
+    window.addEventListener('resize', ()=>{ setVH(); setHeaderH(); });
+    window.addEventListener('orientationchange', ()=>{ setVH(); setHeaderH(); });
 
-    function startStatusSlide(){
-      if (statusTimer) clearInterval(statusTimer);
-      if (statusTrack.children.length <= 2) return;
-      statusTimer = setInterval(()=>shiftOnce(statusTrack), 2600);
-    }
-
-    function fetchStatusJSONP(){
-      const prev = document.getElementById('jsonpStatus');
-      if (prev) prev.remove();
-      const s = document.createElement('script');
-      s.id = 'jsonpStatus';
-      s.src = `${GAS_URL}?action=list&callback=rwStatus&_=${Date.now()}`;
-      document.body.appendChild(s);
-    }
-    fetchStatusJSONP();
-    setInterval(fetchStatusJSONP, 60 * 1000);
-
-    /* ===== 포트폴리오: 자동 캐러셀 ===== */
-    const pTrack = document.getElementById('portfolioTrack');
-    let pTimer = null;
-    function startPortfolioSlide(){
-      if (!pTrack) return;
-      const children = pTrack.children;
-      if (children.length <= 1) return;
-      if (pTimer) clearInterval(pTimer);
-      pTimer = setInterval(()=>shiftOnce(pTrack), 3200);
-    }
-    startPortfolioSlide();
-
-    /* ===== 블로그: 모바일 1장 슬라이드 ===== */
-    const blogTrack = document.getElementById('blogTrack');
-    const blogDots = document.getElementById('blogDots');
-    let bTimer = null, bIdx = 0;
-
-    // 모바일 전용 자동 슬라이드 + 도트
-    const mqMobile = window.matchMedia('(max-width: 560px)');
-
-    function buildBlogDots(){
-      if (!blogTrack || !blogDots) return;
-      blogDots.innerHTML = '';
-      const total = blogTrack.children.length;
-      for(let i=0;i<total;i++){
-        const btn = document.createElement('button');
-        if(i===bIdx) btn.classList.add('active');
-        btn.addEventListener('click', ()=>{
-          bIdx = i;
-          blogTrack.style.transform = `translateX(-${100*i}%)`;
-          [...blogDots.children].forEach((d,ix)=>d.classList.toggle('active', ix===i));
-        });
-        blogDots.appendChild(btn);
-      }
-    }
-
-    function startBlogSlide(){
-      if (!mqMobile.matches || !blogTrack) return;
-      if (bTimer) clearInterval(bTimer);
-      buildBlogDots();
-      bTimer = setInterval(()=>{
-        const total = blogTrack.children.length;
-        bIdx = (bIdx + 1) % total;
-        blogTrack.style.transform = `translateX(-${100*bIdx}%)`;
-        if (blogDots) [...blogDots.children].forEach((d,ix)=>d.classList.toggle('active', ix===bIdx));
-      }, 3800);
-    }
-
-    function stopBlogSlide(){
-      if (bTimer) clearInterval(bTimer);
-      bTimer = null;
-      if (blogTrack) blogTrack.style.transform = 'translateX(0)';
-      bIdx = 0;
-      if (blogDots) [...blogDots.children].forEach((d,ix)=>d.classList.toggle('active', ix===0));
-    }
-
-    // 초기/변경 시 처리
-    startBlogSlide();
-    mqMobile.addEventListener('change', e=>{
-      if (e.matches){ startBlogSlide(); }
-      else { stopBlogSlide(); }
-    });
-
-    /* 반응형 리사이즈 시 캐러셀 보정 */
-    let rAf = null;
-    window.addEventListener('resize', ()=>{
-      if (rAf) cancelAnimationFrame(rAf);
-      rAf = requestAnimationFrame(()=>{
-        if (pTrack) pTrack.style.transform = 'translateX(0)';
-        if (mqMobile.matches === false && blogTrack) blogTrack.style.transform = 'translateX(0)';
-      });
-    });
-
-  });
   </script>
 </body>
 </html>
