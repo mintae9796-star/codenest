@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CodeNest Admin Dashboard</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    :root{
+      --brand:#2b5cff; --bg:#f5f7fb; --card:#fff; --line:#e6e9f2; --muted:#6b7280;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Pretendard,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;background:var(--bg);color:#111}
+    header{display:flex;align-items:center;gap:12px;background:var(--brand);color:#fff;padding:14px 20px;font-weight:700}
+    header .right{margin-left:auto}
+    header .right button{background:rgba(255,255,255,.18);border:0;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+
+    .wrap{display:flex;min-height:calc(100vh - 56px)}
+    aside{width:240px;background:#fff;border-right:1px solid var(--line);padding:16px}
+    .logo{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+    .logo img{width:28px;height:28px}
+    nav a{display:block;padding:10px 12px;border-radius:8px;color:#333;text-decoration:none;margin:2px 0}
+    nav a.active, nav a:hover{background:#eff3ff;color:var(--brand);font-weight:600}
+
+    main{flex:1;display:grid;grid-template-columns: 1fr 420px;gap:16px;padding:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+    .card h2{margin:0 0 8px}
+    .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+    label{display:block;font-weight:600;margin-top:12px}
+    input,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+    textarea{min-height:90px;resize:vertical}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer}
+    .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn.ghost{background:#fff;color:#111}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .kv{display:grid;grid-template-columns:130px 1fr auto auto;gap:8px;align-items:center}
+    .muted{color:var(--muted);font-size:12px}
+
+    /* 로그인 */
+    #login{max-width:360px;margin:64px auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+    #login h2{margin-top:0}
+    #error{color:#c0392b;font-size:12px;margin-top:6px}
+
+    /* 미리보기 */
+    .preview{position:sticky;top:16px;height:fit-content}
+    .pv-hero{border:1px dashed var(--line);border-radius:12px;padding:16px;background:#fafbff}
+    .pv-hero h3{margin:0 0 6px}
+    .pv-chip{display:inline-block;background:#eef2ff;border:1px solid #dbe1ff;margin:2px 4px 0 0;padding:4px 8px;border-radius:999px;font-size:12px}
+    .pv-cta{display:inline-block;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--brand);color:#fff;text-decoration:none}
+    .pv-sub{color:var(--muted);margin:6px 0 0}
+    .pv-aw{font-size:12px;color:#374151;margin-top:4px}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/assets/img/logo/logo3.png" alt="" width="26" height="26" style="border-radius:6px">
+    CodeNest 관리자
+    <div class="right"><button id="logoutBtn" style="display:none">로그아웃</button></div>
+  </header>
+
+  <!-- 로그인 -->
+  <section id="login" style="display:none">
+    <h2>관리자 로그인</h2>
+    <label>이메일</label>
+    <input id="email" type="email" placeholder="admin@codenest.com">
+    <label>비밀번호</label>
+    <input id="password" type="password" placeholder="••••••••">
+    <div class="row">
+      <button class="btn primary" id="loginBtn">로그인</button>
+    </div>
+    <div id="error"></div>
+    <p class="muted" style="margin-top:8px">* Firebase Authentication(이메일/비밀번호)을 활성화하고, 관리자 계정을 콘솔에서 추가하세요.</p>
+  </section>
+
+  <!-- 대시보드 -->
+  <div class="wrap" id="app" style="display:none">
+    <aside>
+      <div class="logo">
+        <img src="/assets/img/logo/logo3.png" alt="CodeNest">
+        <strong>Dashboard</strong>
+      </div>
+      <nav>
+        <a href="#" data-tab="tab-hero" class="active">Hero 관리</a>
+        <a href="#" data-tab="tab-about">About 관리</a>
+        <a href="#" data-tab="tab-faq">FAQ 관리</a>
+      </nav>
+    </aside>
+
+    <main>
+      <!-- LEFT: forms -->
+      <div class="left">
+        <!-- HERO -->
+        <div class="card" id="tab-hero">
+          <h2>Hero 관리</h2>
+          <div class="hint">각 항목 옆 <b>저장/되돌리기</b> 버튼으로 개별 관리됩니다.</div>
+
+          <label>헤드라인 (highlight)</label>
+          <div class="row">
+            <input id="hero_headline" type="text" placeholder="작은 기업도 큰 신뢰를" oninput="renderPreview()">
+            <button class="btn primary" onclick="saveHeroField('headline')">저장</button>
+            <button class="btn" onclick="undoHeroField('headline')">되돌리기</button>
+          </div>
+
+          <label>Animated Words (쉼표 구분 · 4개 권장)</label>
+          <div class="row">
+            <input id="hero_aw" type="text" placeholder="랜딩페이지, 기업형 홈페이지, 자사몰, 서비스 플랫폼" oninput="renderPreview()">
+            <button class="btn primary" onclick="saveHeroField('animatedWords')">저장</button>
+            <button class="btn" onclick="undoHeroField('animatedWords')">되돌리기</button>
+          </div>
+
+          <label>서브 텍스트</label>
+          <div class="row" style="align-items:flex-start">
+            <textarea id="hero_sub" placeholder="합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다." oninput="renderPreview()"></textarea>
+            <div class="row" style="flex-direction:column;gap:6px">
+              <button class="btn primary" onclick="saveHeroField('sub')">저장</button>
+              <button class="btn" onclick="undoHeroField('sub')">되돌리기</button>
+            </div>
+          </div>
+
+          <div class="kv" style="grid-template-columns:130px 1fr auto auto;">
+            <label>CTA 텍스트</label>
+            <input id="hero_ctaText" type="text" placeholder="문의하기" oninput="renderPreview()">
+            <button class="btn primary" onclick="saveHeroField('ctaText')">저장</button>
+            <button class="btn" onclick="undoHeroField('ctaText')">되돌리기</button>
+
+            <span class="muted">버튼 URL</span>
+            <input id="hero_ctaUrl" type="text" placeholder="#contact" oninput="renderPreview()">
+            <button class="btn primary" onclick="saveHeroField('ctaUrl')">저장</button>
+            <button class="btn" onclick="undoHeroField('ctaUrl')">되돌리기</button>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="loadHero">불러오기</button>
+          </div>
+          <p class="muted">저장 시 <code>siteContent/hero</code>의 해당 필드만 업데이트됩니다. 퍼블릭 페이지 호환 키(<code>banners/mainHero</code>, <code>siteTexts/main</code>)도 필요한 항목만 동기화합니다.</p>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="card" id="tab-about" style="display:none">
+          <h2>About 관리</h2>
+          <div class="hint">회사소개 섹션 항목별 저장/되돌리기</div>
+
+          <label>Eyebrow</label>
+          <div class="row">
+            <input id="about_eyebrow" type="text" placeholder="About CodeNest">
+            <button class="btn primary" onclick="saveAboutField('eyebrow')">저장</button>
+            <button class="btn" onclick="undoAboutField('eyebrow')">되돌리기</button>
+          </div>
+
+          <label>Typing 타이틀 (쉼표 구분)</label>
+          <div class="row">
+            <input id="about_titles" type="text" placeholder="전환을 만드는 웹, 비즈니스 성장을 돕는 UX, 빠르게, 제대로, 안정적으로">
+            <button class="btn primary" onclick="saveAboutField('title')">저장</button>
+            <button class="btn" onclick="undoAboutField('title')">되돌리기</button>
+          </div>
+
+          <label>서브 문구(HTML 허용)</label>
+          <div class="row" style="align-items:flex-start">
+            <textarea id="about_sub" placeholder="우리는 <b>작지만 빠른 팀</b>입니다..."></textarea>
+            <div class="row" style="flex-direction:column;gap:6px">
+              <button class="btn primary" onclick="saveAboutField('sub')">저장</button>
+              <button class="btn" onclick="undoAboutField('sub')">되돌리기</button>
+            </div>
+          </div>
+
+          <div class="kv">
+            <span class="muted">지표 · 완료 프로젝트</span>
+            <input id="about_stat_projects" type="number" placeholder="127">
+            <button class="btn primary" onclick="saveAboutField('stat_projects')">저장</button>
+            <button class="btn" onclick="undoAboutField('stat_projects')">되돌리기</button>
+
+            <span class="muted">지표 · 반복 고객</span>
+            <input id="about_stat_clients" type="number" placeholder="32">
+            <button class="btn primary" onclick="saveAboutField('stat_clients')">저장</button>
+            <button class="btn" onclick="undoAboutField('stat_clients')">되돌리기</button>
+
+            <span class="muted">지표 · 만족도(%)</span>
+            <input id="about_stat_satisfaction" type="number" placeholder="98">
+            <button class="btn primary" onclick="saveAboutField('stat_satisfaction')">저장</button>
+            <button class="btn" onclick="undoAboutField('stat_satisfaction')">되돌리기</button>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="loadAbout">불러오기</button>
+          </div>
+          <p class="muted">저장 시 <code>siteContent/about</code>의 해당 필드만 업데이트됩니다.</p>
+        </div>
+
+        <!-- FAQ -->
+        <div class="card" id="tab-faq" style="display:none">
+          <h2>FAQ 관리</h2>
+          <div class="hint">Q/A를 추가하면 공개 사이트에 즉시 반영됩니다.</div>
+
+          <label>질문</label>
+          <input id="faq_q" type="text" placeholder="CodeNest는 어떤 회사인가요?">
+          <label>답변</label>
+          <textarea id="faq_a" placeholder="홈페이지 제작 전문 스타트업입니다."></textarea>
+
+          <div class="row">
+            <button class="btn primary" id="addFaq">FAQ 추가</button>
+          </div>
+          <p class="muted">저장 위치: <code>faq</code> 컬렉션</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: live preview -->
+      <div class="preview">
+        <div class="card">
+          <h2 style="margin-bottom:10px">라이브 미리보기</h2>
+          <div class="pv-hero">
+            <h3 id="pv_headline">작은 기업도 큰 신뢰를</h3>
+            <div class="pv-aw" id="pv_aw">랜딩페이지 · 기업형 홈페이지 · 자사몰 · 서비스 플랫폼</div>
+            <div class="pv-sub" id="pv_sub">합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다.</div>
+            <a href="#contact" class="pv-cta" id="pv_cta">문의하기</a>
+            <div class="muted" style="margin-top:10px">* 공개 페이지와 스타일은 다를 수 있으며, 내용 반영 위치 확인용입니다.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, addDoc, collection, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 🔐 프로젝트 설정 (당신의 프로젝트 값)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5YRRr6AEWZcVPKSKXHOSquYHt1rFw_jU",
+      authDomain: "codenest-7d987.firebaseapp.com",
+      projectId: "codenest-7d987",
+      storageBucket: "codenest-7d987.firebasestorage.app",
+      messagingSenderId: "504218965101",
+      appId: "1:504218965101:web:245f9e8ff8652e3e46db64"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ===== Undo 스택 (필드별) =====
+    // key 예: 'hero.headline', 'about.sub'
+    const undoStack = {};
+
+    function pushUndo(key, oldValue){
+      if(!undoStack[key]) undoStack[key] = [];
+      undoStack[key].push(oldValue);
+    }
+    function popUndo(key){
+      if(!undoStack[key] || undoStack[key].length===0) return undefined;
+      return undoStack[key].pop();
+    }
+
+    // ===== 탭/미리보기 =====
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('data-tab');
+        document.querySelectorAll('.left .card').forEach(c=>c.style.display='none');
+        document.getElementById(id).style.display='block';
+      });
+    });
+    window.renderPreview = function(){
+      const hl = document.getElementById('hero_headline').value || '작은 기업도 큰 신뢰를';
+      const aw = (document.getElementById('hero_aw').value || '랜딩페이지, 기업형 홈페이지, 자사몰, 서비스 플랫폼')
+        .split(',').map(s=>s.trim()).filter(Boolean).join(' · ');
+      const sub = document.getElementById('hero_sub').value || '합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다.';
+      const ct = document.getElementById('hero_ctaText').value || '문의하기';
+      document.getElementById('pv_headline').textContent = hl;
+      document.getElementById('pv_aw').textContent = aw;
+      document.getElementById('pv_sub').textContent = sub;
+      document.getElementById('pv_cta').textContent = ct;
+    }
+
+    // ===== 인증 =====
+    const loginSection = document.getElementById('login');
+    const appWrap = document.getElementById('app');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        loginSection.style.display='none';
+        appWrap.style.display='flex';
+        logoutBtn.style.display='inline-block';
+        // 첫 로드
+        loadHero(); loadAbout();
+      }else{
+        loginSection.style.display='block';
+        appWrap.style.display='none';
+        logoutBtn.style.display='none';
+      }
+    });
+    document.getElementById('loginBtn').addEventListener('click', async ()=>{
+      const email = (document.getElementById('email').value||'').trim();
+      const pw = document.getElementById('password').value;
+      try{ await signInWithEmailAndPassword(auth, email, pw); }
+      catch(e){ document.getElementById('error').textContent = '로그인 실패: ' + e.message; }
+    });
+    logoutBtn.addEventListener('click', ()=>signOut(auth));
+
+    // ===== 공통 util =====
+    const heroDocRef  = () => doc(db,'siteContent','hero');
+    const aboutDocRef = () => doc(db,'siteContent','about');
+
+    // 퍼블릭 페이지 호환 저장(필드 단위)
+    async function compatSaveHeroField(field, value){
+      // banners/mainHero, siteTexts/main 해당 필드만 업데이트
+      if(field==='headline'){
+        await setDoc(doc(db,'banners','mainHero'),{ headline:value },{merge:true});
+        await setDoc(doc(db,'siteTexts','main'),{ hero_highlight:value },{merge:true});
+      }else if(field==='sub'){
+        await setDoc(doc(db,'banners','mainHero'),{ sub:value },{merge:true});
+        await setDoc(doc(db,'siteTexts','main'),{ hero_sub:value },{merge:true});
+      }else if(field==='ctaText'){
+        await setDoc(doc(db,'banners','mainHero'),{ ctaText:value },{merge:true});
+        await setDoc(doc(db,'siteTexts','main'),{ hero_cta_primary:value },{merge:true});
+      }else if(field==='ctaUrl'){
+        await setDoc(doc(db,'banners','mainHero'),{ ctaUrl:value },{merge:true});
+        // siteTexts에는 URL 키를 안 쓰는 구조(필요하면 추가 가능)
+      }else if(field==='animatedWords'){
+        // 4개까지만 동기화
+        const arr = (value||[]).slice(0,4);
+        const payloadBanner = {
+          aw1:arr[0]||'', aw2:arr[1]||'', aw3:arr[2]||'', aw4:arr[3]||''
+        };
+        const payloadTexts = {
+          hero_aw1:arr[0]||'', hero_aw2:arr[1]||'', hero_aw3:arr[2]||'', hero_aw4:arr[3]||''
+        };
+        await setDoc(doc(db,'banners','mainHero'), payloadBanner, {merge:true});
+        await setDoc(doc(db,'siteTexts','main'), payloadTexts, {merge:true});
+      }
+    }
+
+    // ===== HERO: load / save per field / undo =====
+    async function loadHero(){
+      const snap = await getDoc(heroDocRef());
+      if(!snap.exists()) return;
+      const d = snap.data();
+      document.getElementById('hero_headline').value = d.headline||'';
+      document.getElementById('hero_aw').value = (d.animatedWords||[]).join(', ');
+      document.getElementById('hero_sub').value = d.sub||'';
+      document.getElementById('hero_ctaText').value = d.ctaText||'';
+      document.getElementById('hero_ctaUrl').value = d.ctaUrl||'';
+      renderPreview();
+    }
+    document.getElementById('loadHero').addEventListener('click', loadHero);
+
+    async function saveHeroField(field){
+      try{
+        const snap = await getDoc(heroDocRef());
+        const before = snap.exists()? snap.data()[field] : undefined;
+        // 입력값 취득
+        let val;
+        if(field==='headline')      val = document.getElementById('hero_headline').value;
+        else if(field==='animatedWords') val = (document.getElementById('hero_aw').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+        else if(field==='sub')      val = document.getElementById('hero_sub').value;
+        else if(field==='ctaText')  val = document.getElementById('hero_ctaText').value;
+        else if(field==='ctaUrl')   val = document.getElementById('hero_ctaUrl').value;
+
+        // Undo 스택에 이전값 push
+        pushUndo('hero.'+field, before);
+
+        // 해당 필드만 업데이트
+        await setDoc(heroDocRef(), { [field]: val }, { merge:true });
+
+        // 퍼블릭 페이지 호환 키도 같은 필드만 동기화
+        await compatSaveHeroField(field, val);
+
+        alert('저장 완료');
+      }catch(e){
+        alert('저장 실패: '+e.message);
+        console.error(e);
+      }
+    }
+    window.saveHeroField = saveHeroField;
+
+    async function undoHeroField(field){
+      const prev = popUndo('hero.'+field);
+      if(prev === undefined){ alert('되돌릴 값이 없습니다.'); return; }
+      try{
+        // 입력에 반영
+        if(field==='headline')      document.getElementById('hero_headline').value = prev||'';
+        else if(field==='animatedWords') document.getElementById('hero_aw').value = (prev||[]).join(', ');
+        else if(field==='sub')      document.getElementById('hero_sub').value = prev||'';
+        else if(field==='ctaText')  document.getElementById('hero_ctaText').value = prev||'';
+        else if(field==='ctaUrl')   document.getElementById('hero_ctaUrl').value = prev||'';
+
+        // Firestore 되돌리기
+        await setDoc(heroDocRef(), { [field]: prev }, { merge:true });
+        await compatSaveHeroField(field, prev);
+
+        renderPreview();
+        alert('되돌렸습니다.');
+      }catch(e){
+        alert('되돌리기 실패: '+e.message);
+        console.error(e);
+      }
+    }
+    window.undoHeroField = undoHeroField;
+
+    // ===== ABOUT: load / save per field / undo =====
+    async function loadAbout(){
+      const snap = await getDoc(aboutDocRef());
+      if(!snap.exists()) return;
+      const d = snap.data();
+      document.getElementById('about_eyebrow').value = d.eyebrow||'';
+      document.getElementById('about_titles').value = (d.title||[]).join(', ');
+      document.getElementById('about_sub').value = d.sub||'';
+      document.getElementById('about_stat_projects').value = d.stat_projects||'';
+      document.getElementById('about_stat_clients').value = d.stat_clients||'';
+      document.getElementById('about_stat_satisfaction').value = d.stat_satisfaction||'';
+    }
+    document.getElementById('loadAbout').addEventListener('click', loadAbout);
+
+    async function saveAboutField(field){
+      try{
+        const snap = await getDoc(aboutDocRef());
+        const before = snap.exists()? snap.data()[field] : undefined;
+
+        let val;
+        if(field==='eyebrow') val = document.getElementById('about_eyebrow').value;
+        else if(field==='title') val = (document.getElementById('about_titles').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+        else if(field==='sub') val = document.getElementById('about_sub').value;
+        else if(field==='stat_projects') val = Number(document.getElementById('about_stat_projects').value||0);
+        else if(field==='stat_clients') val = Number(document.getElementById('about_stat_clients').value||0);
+        else if(field==='stat_satisfaction') val = Number(document.getElementById('about_stat_satisfaction').value||0);
+
+        pushUndo('about.'+field, before);
+
+        await setDoc(aboutDocRef(), { [field]: val }, { merge:true });
+
+        // (선택) 퍼블릭 페이지 호환 키 일부 동기화
+        if(field==='eyebrow') await setDoc(doc(db,'siteTexts','main'),{ about_eyebrow: val||'' },{merge:true});
+        if(field==='sub') await setDoc(doc(db,'siteTexts','main'),{ about_sub: val||'' },{merge:true});
+
+        alert('저장 완료');
+      }catch(e){
+        alert('저장 실패: '+e.message);
+        console.error(e);
+      }
+    }
+    window.saveAboutField = saveAboutField;
+
+    async function undoAboutField(field){
+      const prev = popUndo('about.'+field);
+      if(prev === undefined){ alert('되돌릴 값이 없습니다.'); return; }
+      try{
+        if(field==='eyebrow') document.getElementById('about_eyebrow').value = prev||'';
+        else if(field==='title') document.getElementById('about_titles').value = (prev||[]).join(', ');
+        else if(field==='sub') document.getElementById('about_sub').value = prev||'';
+        else if(field==='stat_projects') document.getElementById('about_stat_projects').value = prev||0;
+        else if(field==='stat_clients') document.getElementById('about_stat_clients').value = prev||0;
+        else if(field==='stat_satisfaction') document.getElementById('about_stat_satisfaction').value = prev||0;
+
+        await setDoc(aboutDocRef(), { [field]: prev }, { merge:true });
+
+        if(field==='eyebrow') await setDoc(doc(db,'siteTexts','main'),{ about_eyebrow: prev||'' },{merge:true});
+        if(field==='sub') await setDoc(doc(db,'siteTexts','main'),{ about_sub: prev||'' },{merge:true});
+
+        alert('되돌렸습니다.');
+      }catch(e){
+        alert('되돌리기 실패: '+e.message);
+        console.error(e);
+      }
+    }
+    window.undoAboutField = undoAboutField;
+
+    // ===== FAQ: add =====
+    document.getElementById('addFaq').addEventListener('click', async ()=>{
+      const q = document.getElementById('faq_q').value.trim();
+      const a = document.getElementById('faq_a').value.trim();
+      if(!q || !a) return alert('질문과 답변을 입력하세요');
+      try{
+        await addDoc(collection(db,'faq'),{question:q, answer:a, createdAt:new Date()});
+        document.getElementById('faq_q').value='';
+        document.getElementById('faq_a').value='';
+        alert('FAQ 추가 완료');
+      }catch(e){
+        alert('추가 실패: '+e.message);
+        console.error(e);
+      }
+    });
+
+    // ===== 초기 뷰 스위치(보조) =====
+    const loginView = document.getElementById('login');
+    const appView = document.getElementById('app');
+    onAuthStateChanged(auth, user=>{
+      loginView.style.display = user ? 'none' : 'block';
+      appView.style.display   = user ? 'flex' : 'none';
+    });
+  </script>
+</body>
+</html>

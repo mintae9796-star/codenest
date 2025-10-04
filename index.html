@@ -3,244 +3,51 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CodeNest · 메인 헤더 v5 (라이트/아이콘 수정)</title>
+  <title>CodeNest · 메인 헤더 v5</title>
+
+  <!-- System font + Pretendard (preconnect으로 초기 지연 최소화) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
-  <style>
-    :root{
-      /* Light theme */
-      --bg:#F7F9FC; --fg:#0B1220; --muted:#5A6478; 
-      --brand:#2b5cff; --brand2:#4FA3FF; /* 포인트 블루는 소량만 사용 */
-      --card:#FFFFFF; --line:#E6EAF2; --shadow:0 6px 24px rgba(16,24,40,.06);
-    }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,"Apple SD Gothic Neo","Noto Sans KR",Arial; color:var(--fg); background:var(--bg)}
-    a{color:inherit; text-decoration:none}
 
-/* Header */
-header{position:fixed; top:0; left:0; width:100%; z-index:60; background:transparent; transition:background-color .25s, box-shadow .25s, border-color .25s}
-header.scrolled{background:#fff; box-shadow:var(--shadow); border-bottom:1px solid var(--line)}
-.nav{display:flex; align-items:center; justify-content:space-between; height:76px; padding:0 20px}
-.brand img{height:50px; display:block}
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <!-- PNG 아이콘 병행 -->
+  <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+  <!-- 애플 기기용 -->
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png" sizes="180x180">
 
-
-.menu{display:flex; gap:28px; align-items:center; font-weight:700}
-.menu a{position:relative; color:#fff; opacity:.92; padding:4px 0; transition:color .25s}
-header.scrolled .menu a{color:#0B1220}
-.menu a:hover{opacity:1}
-.menu a.active:after, .menu a:hover:after{content:""; position:absolute; left:0; right:0; bottom:-8px; height:2px; background:linear-gradient(90deg,var(--brand),var(--brand2))}
-.cta{padding:10px 14px; border-radius:12px; font-weight:900; border:1px solid rgba(255,255,255,.6); color:#fff; background:transparent; transition:all .25s}
-header.scrolled .cta{border:1px solid var(--line); background:#fff; color:#0B1220}
-.cta.primary{background:var(--brand); color:#fff; border-color:transparent}
-header.scrolled .cta.primary{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#fff}
-
-
-/* Icons */
-.icon{width:26px; height:26px; display:inline-block}
-.icon svg{width:100%; height:100%; transition:stroke .25s}
-header.scrolled .icon svg{stroke:#0B1220}
-
-    /* Mobile overlay (light) */
-    .hamb{display:none}
-    @media(max-width:860px){ .menu{display:none} .hamb{display:flex; align-items:center} }
-    .overlay{position:fixed; inset:0; background:#fff; color:#0B1220; transform:translateY(-100%); transition:transform .28s ease; z-index:100; border-bottom:1px solid var(--line)}
-    .overlay.open{transform:none}
-    .overlay .panel{padding:18px 20px 28px}
-    .overlay .toprow{display:flex; align-items:center; justify-content:space-between; height:56px}
-    .overlay .logo img{height:40px}
-    .overlay .close{background:none; border:0; color:#0B1220; padding:8px}
-    .overlay nav{margin-top:8px; padding:20px;}
-    .m-item{display:flex; align-items:center; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--line); font-weight:700}
-    .m-item .arrow{opacity:.7}
-    .m-section{margin-top:14px; color:#667085; font-size:13px; letter-spacing:.2px}
-    .m-sub{padding:12px 0; border-bottom:1px solid var(--line)}
-    .m-sub a{display:block; padding:8px 0; color:#0B1220; font-weight:600}
-    .overlay .bottom{padding-top:18px}
-    .badge{display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:12px; background:#00C73C; color:#fff; font-weight:800}
-
-/* Hero with background image */
-.hero{position:relative; display:grid; place-items:center; min-height:100vh; background:transparent; background-image:var(--hero-img, none); background-size:cover; background-position:var(--hero-pos, center); background-repeat:no-repeat}
-.hero::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,.4)}
-.hero .inner{position:relative; z-index:1; max-width:980px; margin:0 auto; text-align:center; color:#fff; padding-top:var(--header-h)}
-.eyebrow{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid rgba(255,255,255,.5); border-radius:999px; font-size:12px; color:#fff; background:rgba(0,0,0,.25)}
-h1{font-size:clamp(36px,7.2vw,64px); line-height:1.5; margin:16px 0 8px; text-align:center; color:#fff}
-h1 span{background:linear-gradient(90deg,#fff,#E6F0FF); -webkit-background-clip:text; background-clip:text; color:transparent}
-.sub{max-width:860px; margin:5px auto; color:#E6E9F2}
-.ghost{padding:10px 14px; border-radius:12px; font-weight:900; border:1px solid rgba(255,255,255,.45); background:transparent; color:#fff}
-.row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; justify-content:center}
-.scroll-indicator{position:absolute; left:50%; bottom:18px; transform:translateX(-50%); color:#fff; font-size:12px; display:flex; flex-direction:column; align-items:center; gap:6px}
-.scroll-indicator svg{width:18px; height:18px; animation:bounce 1.6s infinite; stroke:#fff}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
-
-/* Mobile-specific hero background override */
-@media(max-width:860px){
-.hero{ background-image:var(--hero-img-mobile, var(--hero-img, none)); background-position:var(--hero-pos-mobile, var(--hero-pos, center)); }
-}
-
-/* 강조 키워드 */
-.highlight {
-  font-weight: 800;
-}
-
-/* 애니메이션 텍스트 */
-.animated-words {
-  display:inline-block;
-  overflow:hidden;
-  height:1.2em;
-  vertical-align:bottom;
-  color: var(--brand2);
-  font-weight:900;
-  position:relative;
-  background:#0B1220;
-  border: 1px solid #0B1220;
-  border-radius: 30px;
-  padding: 0 20px;
-}
-.animated-words span {
-  display:block;
-  line-height:1.2em;
-  animation: slideWords 12s infinite;
-}
-@keyframes slideWords {
-  0%, 20%   { transform:translateY(0); }
-  25%, 45%  { transform:translateY(-100%); }
-  50%, 70%  { transform:translateY(-200%); }
-  75%, 95%  { transform:translateY(-300%); }
-  100%      { transform:translateY(0); }
-}
-
-/* 칩 스타일 */
-.chips {
-  margin:18px auto;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.chips span {
-  font-size:13px;
-  font-weight:700;
-  padding:6px 12px;
-  border-radius:20px;
-  background:rgb(255, 255, 255);
-  border:1px solid var(--line);
-  box-shadow:0 1px 4px rgba(0,0,0,.04);
-  color:#0B1220;
-}
-
-/* Overlay visibility & close button fixes */
-.overlay{
-  transform:translateY(-100%);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-.overlay.open{
-  transform:none;
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-
-/* ensure top row/close button always clickable & big enough */
-.overlay .toprow{ position:relative; }
-.overlay .close{
-  position:absolute; top:8px; right:8px;
-  width:44px; height:44px;
-  display:flex; align-items:center; justify-content:center;
-}
-
-/* prevent background scroll when menu open */
-body.menu-open{ overflow:hidden; }
-
-/* ===============================
-Responsive breakpoints (320 / 375 / 430 / 768)
-=============================== */
-/* Tablet & down */
-@media (max-width: 768px){
-/* show hamburger, hide desktop menu */
-.menu{ display:none }
-.hamb{ display:flex; align-items:center }
-
-
-/* hero center alignment without extra top padding */
-.hero{ padding:0 16px }
-.hero .inner{ padding-top: var(--header-h) }
-h1{ font-size:clamp(28px, 7vw, 48px) }
-.sub{ font-size:15px }
-.cta{ padding:9px 12px }
-}
-
-
-/* Small / medium phones (≤430px) e.g., iPhone Plus/Max, many Androids */
-@media (max-width: 430px){
-:root{ --header-h: 64px; }
-.nav{ height:64px; padding:0 16px }
-.brand img{ height:42px }
-h1{ font-size:clamp(26px, 8vw, 40px) }
-.sub{ font-size:14px }
-.chips{ gap:8px }
-.chips span{ padding:6px 10px; font-size:12px }
-.scroll-indicator{ bottom:12px }
-}
-
-
-/* Compact phones (≤375px) e.g., iPhone 13 mini, iPhone 12/13/14 */
-@media (max-width: 375px){
-:root{ --header-h: 60px; }
-.nav{ height:60px; padding:0 14px }
-.brand img{ height:38px }
-h1{ font-size:clamp(24px, 8.6vw, 36px) }
-.sub{ font-size:13px }
-.cta{ padding:8px 10px; border-radius:10px }
-.chips span{ padding:5px 9px; border-radius:16px }
-.animated-words{ height:1.1em; padding:0 10px; border-radius:18px }
-}
-
-
-/* Extra small (≤340px) e.g., iPhone SE 1/2, 일부 소형 안드로이드 */
-@media (max-width: 340px){
-:root{ --header-h: 56px; }
-.nav{ height:56px; padding:0 12px }
-.brand img{ height:34px }
-h1{ font-size:22px }
-.sub{ font-size:12px }
-.row{ gap:8px }
-.ghost, .cta{ padding:7px 9px; font-size:13px }
-.chips{ gap:6px }
-.chips span{ font-size:11px }
-.scroll-indicator{ display:none } /* very small screens: hide */
-}
-
-
-/* Also hide scroll indicator on very short heights */
-@media (max-height: 640px){ .scroll-indicator{ display:none } }
-
-
-</style>
+  </script>
 </head>
 <body>
-  <header id="siteHeader" aria-label="사이트 헤더">
+  <header id="siteHeader" class="on-hero" aria-label="사이트 헤더">
     <div class="nav">
       <a href="#" class="brand" aria-label="CodeNest 홈">
-        <img id="logoImg"
-     src="logo.png"
-     data-logo-dark="logo.png"
-     data-logo-light="logo3.png"
-     alt="CodeNest 로고">
+        <img
+          id="logoImg"
+          src="/assets/img/logo/logo3.png"
+          data-logo-dark="/assets/img/logo/logo3.png"
+          data-logo-light="/assets/img/logo/logo3.png"
+          alt="CodeNest 로고"
+          width="140" height="50"
+          decoding="async"
+        >
       </a>
       <nav class="menu" aria-label="주요 메뉴">
-        <a href="#about" class="active">회사소개</a>
-        <a href="#services">서비스</a>
-        <a href="#portfolio">포트폴리오</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact" class="cta primary" style="padding:10px 14px;">문의하기</a>
+        <a href="#about" class="active" data-key="nav_about">회사소개</a>
+        <a href="#services" data-key="nav_services">서비스</a>
+        <a href="#portfolio" data-key="nav_portfolio">포트폴리오</a>
+        <a href="#faq" data-key="nav_faq">FAQ</a>
+        <a href="#contact" class="cta primary" style="padding:10px;" data-key="nav_contact">문의하기</a>
       </nav>
       <div class="hamb">
-        <button id="openNav" aria-controls="mobileMenu" aria-expanded="false" aria-haspopup="true" aria-label="모바일 메뉴 열기" style="background:none; border:0; padding:6px;">
+        <button id="openNav" aria-controls="mobileMenu" aria-expanded="false" aria-haspopup="true" aria-label="모바일 메뉴 열기" class="icon-btn">
           <span class="icon" aria-hidden="true">
-            <!-- 햄버거 SVG -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            <!-- 햄버거 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
           </span>
         </button>
       </div>
@@ -251,136 +58,528 @@ h1{ font-size:22px }
   <div id="mobileMenu" class="overlay" role="dialog" aria-modal="true" aria-label="모바일 전체 메뉴">
     <div class="panel">
       <div class="toprow">
-        <div class="logo"><img src="logo.png" alt="CodeNest"></div>
-        <button id="closeNav" class="close" aria-label="닫기">
+        <div class="logo">
+          <img src="assets/img/logo/logo3.png" alt="CodeNest" width="120" height="40" decoding="async" loading="lazy">
+        </div>
+        <button id="closeNav" class="close icon-btn" aria-label="닫기">
           <span class="icon" aria-hidden="true">
-            <!-- X 아이콘 SVG -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+            <!-- X -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6l-12 12"/>
+            </svg>
           </span>
         </button>
       </div>
-      <nav>
-        <a class="m-item" href="#contact">문의하기 <span class="arrow">↗</span></a>
-        <a class="m-item" href="#about">회사소개 <span class="arrow">↗</span></a>
-        <a class="m-item" href="#portfolio">포트폴리오 <span class="arrow">↗</span></a>
-        <a class="m-item" href="#column">칼럼 <span class="arrow">↗</span></a>
-        <a class="m-item" href="#faq">FAQ <span class="arrow">↗</span></a>
 
-        <div class="m-section">서비스 소개</div>
+      <nav>
+        <a class="m-item" href="#contact" data-key="mobile_menu_contact">문의하기 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="m-item" href="#about" data-key="mobile_menu_about">회사소개 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="m-item" href="#portfolio" data-key="mobile_menu_portfolio">포트폴리오 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="m-item" href="#column" data-key="mobile_menu_column">칼럼 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="m-item" href="#faq" data-key="mobile_menu_faq">FAQ <span class="arrow" aria-hidden="true">↗</span></a>
+
+        <div class="m-section" data-key="mobile_menu_services">서비스 소개</div>
         <div class="m-sub">
-          <a href="#svc-gov">정부 지원 홈페이지 제작</a>
-          <a href="#svc-landing">랜딩페이지 제작</a>
-          <a href="#svc-app">앱 개발</a>
-          <a href="#svc-service">서비스 개발</a>
+          <a href="#svc-gov" data-key="mobile_menu_gov">정부 지원 홈페이지 제작</a>
+          <a href="#svc-landing" data-key="mobile_menu_landing">랜딩페이지 제작</a>
+          <a href="#svc-app" data-key="mobile_menu_app">앱 개발</a>
+          <a href="#svc-service" data-key="mobile_menu_service">서비스 개발</a>
         </div>
       </nav>
+
       <div class="bottom">
-        <a class="badge" href="#blog" aria-label="네이버 블로그">blog</a>
+        <a class="badge" href="#blog" aria-label="네이버 블로그" data-key="mobile_menu_blog">blog</a>
       </div>
     </div>
   </div>
 
-<section class="hero"
-  style="
-    --hero-img: url('hero.jpg');
-    --hero-img-mobile: url('hero-mobile.jpg');     /* 모바일 전용 */
-    --hero-pos: center;                            /* 데스크톱 포커스(선택) */
-    --hero-pos-mobile: center 30%;                 /* 모바일 포커스(선택) */
-  "
->
-  <div class="inner">
-    <!-- 2단 문구 구조 -->
-    <h1>
-      <span class="highlight">작은 기업도 큰 신뢰를</span><br>
-      <span class="animated-words">
-        <span>랜딩페이지</span>
-        <span>기업형 홈페이지</span>
-        <span>자사몰</span>
-        <span>서비스 플랫폼</span>
-      </span>
-      제작
-    </h1>
-    <p class="sub">합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다.</p>
+  <!-- Hero (이미지는 data-hero-* 유지, 텍스트는 data-key로 Firestore 매핑) -->
+  <section
+    id="hero"
+    class="hero"
+    data-hero-img="/assets/img/hero/hero.jpg"
+    data-hero-img-mobile="/assets/img/hero/hero-mobile.jpg"
+    data-hero-pos="center"
+    data-hero-pos-mobile="center 30%"
+  >
+    <div class="inner">
+      <h1>
+        <span class="highlight" data-key="hero_highlight">작은 기업도 큰 신뢰를</span><br>
+        <span class="animated-words">
+          <span data-key="hero_aw1">랜딩페이지</span>
+          <span data-key="hero_aw2">기업형 홈페이지</span>
+          <span data-key="hero_aw3">자사몰</span>
+          <span data-key="hero_aw4">서비스 플랫폼</span>
+        </span>
+        제작
+      </h1>
 
-    <!-- 칩(Chip) 스타일 -->
-    <div class="chips">
-      <span>🚀 빠른 제작</span>
-      <span>💡 합리적 비용</span>
-      <span>📈 SEO 최적화</span>
+      <p class="sub" data-key="hero_sub">합리한 비용으로, 당신의 브랜드를 온라인에서 빛나게 합니다.</p>
+
+      <div class="chips" aria-label="핵심 특장점">
+        <span data-key="hero_chip1">🚀 빠른 제작</span>
+        <span data-key="hero_chip2">💡 합리적 비용</span>
+        <span data-key="hero_chip3">📈 SEO 최적화</span>
+      </div>
+
+      <div class="row">
+        <a href="#contact" class="cta primary" data-key="hero_cta_primary">문의하기</a>
+        <a href="#portfolio" class="ghost" data-key="hero_cta_secondary">포트폴리오 보기</a>
+      </div>
     </div>
 
-    <!-- CTA 버튼 -->
-    <div class="row">
-      <a href="#contact" class="cta primary">문의하기</a>
-      <a href="#portfolio" class="ghost">포트폴리오 보기</a>
-    </div>
-  </div>
-      <div class="scroll-indicator" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="scroll-indicator" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
       <span>Scroll</span>
     </div>
+  </section>
+
+    <!-- Client Logos -->
+  <div class="about-logos">
+    <div class="logo-marquee">
+      <div class="logo-track" id="logoTrack">
+        <img src="/assets/img/logo/logo3.png" alt="고객사1" loading="lazy" decoding="async">
+        <img src="/assets/img/logo/logo3.png" alt="고객사2" loading="lazy" decoding="async">
+        <img src="/assets/img/logo/logo3.png" alt="고객사3" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </div>
+
+<section id="services" class="about is-fullbleed">
+  <div class="about-head">
+    <span class="eyebrow">Our Services</span>
+    <h2 class="about-title"
+        data-typing='["홈페이지 제작","랜딩페이지 제작","운영 관리 / UI","SEO 최적화","반응형 웹 리뉴얼"]'>
+      <span class="typing-text"></span><span class="caret">|</span>
+    </h2>
+    <p class="about-sub">
+      기획부터 개발, 최적화까지 <b>원스톱 웹 솔루션</b>을 제공합니다.<br>
+      맞춤형 홈페이지, 랜딩페이지, 관리 UI, SEO, 리뉴얼까지 모두 맡겨주세요.
+    </p>
+    <div class="about-ctas">
+      <a href="#portfolio" class="cta">포트폴리오 보기</a>
+      <a href="#contact" class="cta primary">프로젝트 문의</a>
+    </div>
+  </div>
+
+  <!-- Services Grid -->
+  <div class="about-media">
+
+    <!-- 홈페이지 제작 -->
+    <a class="card m1 reveal" href="#svc-home" aria-label="홈페이지 제작 상세 보기">
+      <img src="/assets/img/services/web.png" alt="홈페이지 제작" loading="lazy">
+      <div class="card-content">
+        <div class="card-top">
+          <svg viewBox="0 0 24 24" class="card-icon">
+            <rect x="3" y="4" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M3 8h18" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="card-title">홈페이지 제작</span>
+        </div>
+        <p class="card-desc">기업 맞춤형 UI/UX 설계와 유지보수 용이한 구조로 제작합니다.</p>
+      </div>
+    </a>
+
+    <!-- 랜딩페이지 제작 -->
+    <a class="card m2 reveal" href="#svc-landing" aria-label="랜딩페이지 제작 상세 보기" data-delay="100">
+      <img src="/assets/img/services/landing.jpg" alt="랜딩페이지 제작" loading="lazy">
+      <div class="card-content">
+        <div class="card-top">
+          <svg viewBox="0 0 24 24" class="card-icon">
+            <path d="M4 6h16M4 12h10M4 18h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="card-title">랜딩페이지 제작</span>
+        </div>
+        <p class="card-desc">전환율 극대화를 위한 퍼널 설계, 카피라이팅, CTA를 반영합니다.</p>
+      </div>
+    </a>
+
+    <!-- 운영 관리 / UI -->
+    <a class="card m3 reveal" href="#svc-dashboard" aria-label="운영 관리 UI 상세 보기" data-delay="200">
+      <img src="/assets/img/services/dashboard.png" alt="운영 관리 UI" loading="lazy">
+      <div class="card-content">
+        <div class="card-top">
+          <svg viewBox="0 0 24 24" class="card-icon">
+            <path d="M4 5h16v6H4zM4 13h7v6H4zM13 13h7v6h-7z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="card-title">운영 관리 / UI</span>
+        </div>
+        <p class="card-desc">백오피스, 권한 관리, 로그/통계 등 운영 중심 대시보드를 제공합니다.</p>
+      </div>
+    </a>
+
+    <!-- SEO 최적화 -->
+    <a class="card m4 reveal" href="#svc-seo" aria-label="SEO 최적화 상세 보기" data-delay="300">
+      <img src="/assets/img/services/seo.png" alt="SEO 최적화" loading="lazy">
+      <div class="card-content">
+        <div class="card-top">
+          <svg viewBox="0 0 24 24" class="card-icon">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M16 16l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="card-title">SEO 최적화</span>
+        </div>
+        <p class="card-desc">검색 엔진 친화적 구조와 콘텐츠 전략으로 상위 노출을 지원합니다.</p>
+      </div>
+    </a>
+
+    <!-- 반응형 웹 리뉴얼 -->
+    <a class="card m5 reveal" href="#svc-renewal" aria-label="반응형 웹 리뉴얼 상세 보기" data-delay="400">
+      <img src="/assets/img/services/renewal.png" alt="반응형 웹 리뉴얼" loading="lazy">
+      <div class="card-content">
+        <div class="card-top">
+          <svg viewBox="0 0 24 24" class="card-icon">
+            <path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="card-title">반응형 웹 리뉴얼</span>
+        </div>
+        <p class="card-desc">모바일/태블릿/데스크탑 최적화, 최신 디자인으로 웹을 새롭게 바꿉니다.</p>
+      </div>
+    </a>
+
+  </div>
 </section>
 
-zz
-  <script>
-    // Header shadow on scroll
-    const header = document.getElementById('siteHeader');
-function onScroll(){
-  const top = window.scrollY || window.pageYOffset;
-  const atTop = top < 10;
-  header.classList.toggle('scrolled', !atTop);
-  header.classList.toggle('on-hero', atTop);
 
-  // 로고 자동 스왑
-  const logo = document.getElementById('logoImg');
-  if(logo){
-    const dark = logo.getAttribute('data-logo-dark');
-    const light = logo.getAttribute('data-logo-light');
-    if(light){ logo.src = atTop ? light : (dark || logo.src); }
-  }
-}
-    window.addEventListener('scroll', onScroll); onScroll();
+<section id="process" class="is-fullbleed">
+  <div class="proc-inner">
+    <!-- 왼쪽 -->
+    <div class="proc-left">
+      <span class="eyebrow">Our Process</span>
+      <h2 class="proc-title">전문적인 제작 프로세스</h2>
+        <p class="proc-sub">
+        웹사이트 그 이상,<br>
+        <b>비즈니스 성장을 설계합니다.</b>
+        </p>
 
-    // Mobile overlay menu
-    const menu = document.getElementById('mobileMenu');
-    const openBtn = document.getElementById('openNav');
-    const closeBtn = document.getElementById('closeNav');
+    </div>
 
-function openMenu(){
-  menu.classList.add('open');
-  document.body.classList.add('menu-open');
-  openBtn?.setAttribute('aria-expanded','true');
-}
-function closeMenu(){
-  menu.classList.remove('open');
-  document.body.classList.remove('menu-open');
-  openBtn?.setAttribute('aria-expanded','false');
-}
-    openBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); openMenu(); });
-    closeBtn?.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMenu(); });
-    document.addEventListener('click', (e)=>{
-      const isInside = menu.contains(e.target) || openBtn.contains(e.target);
-      if(!isInside) closeMenu();
-    });
+    <!-- 오른쪽 -->
+    <div class="proc-right">
+      <ul class="steps-block">
+        <li class="line">
+          <div class="title-row">
+            <div class="title">Consultation</div>
+            <button class="more-btn" aria-label="자세히 보기">…</button>
+          </div>
+          <div class="desc">고객님의 필요와 목표를 듣고, 예산·일정·원하는 결과를 함께 정리합니다.</div>
+        </li>
+        <li class="line">
+          <div class="title-row">
+            <div class="title">Planning</div>
+            <button class="more-btn" aria-label="자세히 보기">…</button>
+          </div>
+          <div class="desc">홈페이지에 필요한 페이지와 구조를 계획합니다. 쉽게 말해 ‘뼈대’를 만드는 단계입니다.</div>
+        </li>
+        <li class="line">
+          <div class="title-row">
+            <div class="title">Design</div>
+            <button class="more-btn" aria-label="자세히 보기">…</button>
+          </div>
+          <div class="desc">색상, 글씨체, 버튼 모양까지 정해 사용자가 편하게 볼 수 있도록 디자인합니다.</div>
+        </li>
+        <li class="line">
+          <div class="title-row">
+            <div class="title">Development</div>
+            <button class="more-btn" aria-label="자세히 보기">…</button>
+          </div>
+          <div class="desc">디자인된 화면을 실제로 작동하게 코딩합니다. 모바일에서도 잘 보이고, 검색엔진에도 노출됩니다.</div>
+        </li>
+        <li class="line">
+          <div class="title-row">
+            <div class="title">Operations & Maintenance</div>
+            <button class="more-btn" aria-label="자세히 보기">…</button>
+          </div>
+          <div class="desc">사이트를 운영하면서 문제가 없는지 확인하고, 필요할 때마다 업데이트합니다.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-    // === Full-height hero helpers ===
-    // 모바일 브라우저 주소창에 의한 100vh 오류 보정
-    function setVH(){
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-    // 실제 헤더 높이를 읽어 --header-h에 반영
-    function setHeaderH(){
-      const h = document.getElementById('siteHeader')?.offsetHeight || 76;
-      document.documentElement.style.setProperty('--header-h', h + 'px');
-    }
-    setVH(); setHeaderH();
-    window.addEventListener('resize', ()=>{ setVH(); setHeaderH(); });
-    window.addEventListener('orientationchange', ()=>{ setVH(); setHeaderH(); });
+<section id="cta" class="cta-section">
+  <div class="cta-inner">
+    <h2>당신의 비즈니스 성장,<br><span>지금 시작하세요</span></h2>
+    <p>맞춤형 홈페이지 제작과 운영 관리로 성과를 만들어드립니다.</p>
+    <a href="#contact" class="cta-btn">무료 상담 신청하기</a>
+  </div>
+</section>
 
 
-    window.addEventListener('resize', ()=>{ if(window.innerWidth > 860) closeMenu(); });
-  </script>
+<section id="portfolio" class="is-fullbleed">
+  <div class="port-head">
+    <span class="eyebrow">Our Work</span>
+    <h2 class="port-title">포트폴리오</h2>
+    <p class="port-sub">실제 진행한 프로젝트 사례를 소개합니다.</p>
+  </div>
+
+  <div class="portfolio-slider">
+    <!-- Row 1 -->
+    <div class="portfolio-track row1">
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Landing</span><span class="chip">SEO</span>
+          </div>
+          <h3>Project One</h3>
+          <p>랜딩 리뉴얼 · 검색최적화</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">E-commerce</span><span class="chip">UX</span>
+          </div>
+          <h3>Project Two</h3>
+          <p>쇼핑몰 UX 개편</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Corporate</span><span class="chip">Responsive</span>
+          </div>
+          <h3>Project Three</h3>
+          <p>기업 반응형 웹 구축</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Brand</span><span class="chip">Design</span>
+          </div>
+          <h3>Project Four</h3>
+          <p>브랜드 사이트 리뉴얼</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="portfolio-track row2">
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Dashboard</span><span class="chip">Admin</span>
+          </div>
+          <h3>Project Five</h3>
+          <p>운영 대시보드 · 권한 관리</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Renewal</span><span class="chip">RWD</span>
+          </div>
+          <h3>Project Six</h3>
+          <p>반응형 웹 리뉴얼</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">B2B</span><span class="chip">Forms</span>
+          </div>
+          <h3>Project Seven</h3>
+          <p>B2B 리드 수집 페이지</p>
+        </div>
+      </a>
+      <a class="p-card">
+        <img src="https://placehold.co/600x400" alt="">
+        <div class="p-overlay">
+          <div class="p-tags">
+            <span class="chip">Content</span><span class="chip">Blog</span>
+          </div>
+          <h3>Project Eight</h3>
+          <p>콘텐츠 허브 구축</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="split-layout">
+  <!-- 왼쪽: 제목/설명 -->
+  <div class="testi-left">
+    <span class="eyebrow">Testimonials</span>
+    <h2 class="testi-title">고객 후기</h2>
+    <p class="testi-sub">
+      실제 고객들이 남긴 이야기.<br>
+      저희의 전문성과 신뢰를 확인해 보세요.
+    </p>
+    <p class="testi-extra">
+      다양한 산업 분야에서 축적된 경험.<br>
+      고객과 함께 성과를 만들어갑니다.
+    </p>
+  </div>
+
+  <!-- 오른쪽: 카드 스택 -->
+  <div class="testi-right">
+    <div class="testi-stage" id="testiStage">
+      <!-- 카드 1 -->
+      <article class="tcard">
+        <p class="quote">“상담이 친절했고, 과정 전반을 투명하게 안내받았습니다.”</p>
+        <div class="profile">
+          <img src="https://placehold.co/60" alt="">
+          <div><strong>김현수</strong><span>스타트업 대표</span></div>
+        </div>
+      </article>
+      <!-- 카드 2 -->
+      <article class="tcard">
+        <p class="quote">“리뉴얼 이후 문의와 전환율이 눈에 띄게 올랐어요.”</p>
+        <div class="profile">
+          <img src="https://placehold.co/60" alt="">
+          <div><strong>이지은</strong><span>마케팅 팀장</span></div>
+        </div>
+      </article>
+      <!-- 카드 3 -->
+      <article class="tcard">
+        <p class="quote">“SEO 최적화 덕분에 검색 유입이 크게 증가했습니다.”</p>
+        <div class="profile">
+          <img src="https://placehold.co/60" alt="">
+          <div><strong>박성호</strong><span>브랜드 매니저</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="faq-section">
+  <div class="faq-inner">
+    <h2 class="faq-title">자주 묻는 질문</h2>
+
+    <div class="faq-list">
+      <!-- Q1 -->
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          홈페이지 제작 기간은 얼마나 걸리나요?
+          <span class="q-arrow">▼</span>
+        </button>
+        <div class="faq-answer" hidden>
+          <p>일반 랜딩페이지는 2~3주, 맞춤형 홈페이지는 보통 4주 이상 소요됩니다. 요구 범위와 검수 라운드에 따라 달라집니다.</p>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          운영 관리 / UI 수정도 해주나요?
+          <span class="q-arrow">▼</span>
+        </button>
+        <div class="faq-answer" hidden>
+          <p>네. 콘텐츠 업데이트, 보안 점검, 경미한 디자인 및 기능 수정 등 월 단위 운영 관리 서비스를 제공합니다.</p>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          SEO 최적화는 포함되나요?
+          <span class="q-arrow">▼</span>
+        </button>
+        <div class="faq-answer" hidden>
+          <p>기본 SEO(메타/OG, 구조화, 속도 최적화)는 포함됩니다. 심화 키워드 분석 및 전략은 별도 패키지로 제공됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== Contact Section ===== -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+    <h2 class="section-title">프로젝트 문의</h2>
+    <p class="section-lead">
+      간단한 정보를 남겨주시면 빠르게 상담 드립니다.<br>
+      예산·일정이 정해지지 않아도 괜찮습니다.
+    </p>
+
+<form id="contactForm" class="contact-form">
+  <label class="f-label">프로젝트 유형</label>
+  <div class="pill-group pill-scroll">
+    <button type="button" class="pill">홈페이지 제작</button>
+    <button type="button" class="pill">랜딩페이지 제작</button>
+    <button type="button" class="pill">운영 관리 / UI</button>
+    <button type="button" class="pill">SEO 최적화</button>
+    <button type="button" class="pill">반응형 웹 리뉴얼</button>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-col">
+      <label>성함 / 담당자명 <span class="req">*</span></label>
+      <input type="text" name="name" required placeholder="홍길동" />
+      <label>이메일 <span class="req">*</span></label>
+      <input type="email" name="email" required placeholder="you@company.com" />
+      <label>연락처 <span class="req">*</span></label>
+      <input type="tel" name="phone" placeholder="010-0000-0000" />
+    </div>
+    <div class="form-col">
+      <label>요청/설명</label>
+      <textarea name="message" rows="5" required placeholder="원하시는 서비스, 참고 사이트, 대략적인 목표 등을 알려주세요."></textarea>
+    </div>
+  </div>
+
+  <label class="agree">
+    <input type="checkbox" name="agree" required />
+    개인정보 수집·이용에 동의합니다.
+  </label>
+
+  <div class="submit-row">
+    <button type="submit" class="cta primary">문의 보내기</button>
+    <span class="form-hint">영업일 기준 24시간 내 회신 드립니다.</span>
+  </div>
+
+  <div class="form-alert" id="formAlert" hidden></div>
+</form>
+  </div>
+</section>
+
+
+<footer id="site-footer">
+  <div class="footer-inner">
+    <!-- 로고 & 소개 -->
+    <div class="footer-col">
+      <img src="assets/img/logo/logo3.png" alt="CodeNest">
+      <p class="footer-desc">
+        단순한 웹사이트 제작을 넘어서,  
+        비즈니스 목표 달성을 위한 전략적 파트너가 됩니다.
+      </p>
+    </div>
+
+    <!-- 메뉴 -->
+    <div class="footer-col">
+      <h4 class="footer-title">Quick Links</h4>
+      <ul class="footer-menu">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- 연락처 -->
+    <div class="footer-col">
+      <h4 class="footer-title">Contact</h4>
+      <p>Email: <a href="mailto:hello@codenest.com">hello@codenest.com</a></p>
+      <p>Phone: <a href="tel:+821012345678">+82 10-1234-5678</a></p>
+      <p>Seoul, South Korea</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 CodeNest. All rights reserved.</p>
+  </div>
+</footer>
+  <!-- Scripts (defer로 렌더 블로킹 방지) -->
+  <script src="/assets/js/script.js" defer></script>
 </body>
 </html>
