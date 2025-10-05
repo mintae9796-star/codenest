@@ -401,17 +401,21 @@ document.querySelectorAll("#faq .faq-item").forEach(item => {
 })();
 
 
-/* ===== Contact → Google Sheet submit (fix: name 충돌, phone required) ===== */
+/* ===== Contact → Google Sheet submit (CORS-safe: Beacon + no-cors) ===== */
 (function(){
   const form = document.getElementById("contactForm");
   if(!form) return;
 
   const alertBox = document.getElementById("formAlert");
-  const pills = form.querySelectorAll(".pill");
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwFSugzYX0o0wMPVCUwr47pk5qg9qZhqllFNgMSbIs4ddyZAHm9Z5ua1P0FEngfh7V8Aw/exec"; // ← Apps Script 웹 앱 URL
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyH7Rp6_v2mzS30h_mecjpnpnR-FdUZpIOfgrAFmh-eHv3TlI5bpiXaHVJDi3eBaErhig/exec";
 
-  // 칩 토글
-  pills.forEach(pill=> pill.addEventListener("click", ()=> pill.classList.toggle("on")));
+  // pill 토글 유지
+  form.querySelectorAll(".pill").forEach(pill=>{
+    pill.addEventListener("click", ()=> pill.classList.toggle("on"));
+  });
+
+  const $ = (n) => form.elements[n];
+  const phoneKR = /^(0\d{1,2})-?\d{3,4}-?\d{4}$/;
 
   function showAlert(msg, ok=false){
     if(!alertBox) return;
@@ -419,12 +423,6 @@ document.querySelectorAll("#faq .faq-item").forEach(item => {
     alertBox.className = "form-alert " + (ok ? "ok" : "err");
     alertBox.textContent = msg;
   }
-
-  // ★ 안전한 접근 유틸
-  const $ = (n) => form.elements[n];
-
-  // 한국형 전화번호 간단 패턴: 02/0XX-XXXX-XXXX, 하이픈 생략 허용
-  const phoneKR = /^(0\d{1,2})-?\d{3,4}-?\d{4}$/;
 
   function validate(){
     const nameVal  = ($("name")?.value || "").trim();
@@ -437,18 +435,28 @@ document.querySelectorAll("#faq .faq-item").forEach(item => {
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) return showAlert("올바른 이메일 주소를 입력해 주세요."), false;
     if(!phoneVal) return showAlert("연락처를 입력해 주세요."), false;
     if(!phoneKR.test(phoneVal)) return showAlert("연락처 형식을 확인해 주세요. 예) 010-1234-5678"), false;
-    if(!msgVal)   return showAlert("요청/설명을 입력해 주세요."), false;
     if(!agree)    return showAlert("개인정보 수집·이용에 동의가 필요합니다."), false;
-
     return true;
   }
 
-  async function sendToSheet(payload){
-    const res = await fetch(WEBAPP_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    return res.json();
+  async function sendCORSsafe(payload){
+    const data = JSON.stringify(payload);
+    const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+
+    // 1) sendBeacon 시도 (가장 안정적으로 CORS 회피)
+    let sent = false;
+    if ('sendBeacon' in navigator) {
+      try { sent = navigator.sendBeacon(WEBAPP_URL, blob); } catch(e){ sent = false; }
+    }
+
+    // 2) 실패 시 no-cors fetch (응답은 못 읽지만 서버는 수신)
+    if (!sent) {
+      await fetch(WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: blob
+      });
+    }
   }
 
   form.addEventListener("submit", async (e)=>{
@@ -466,22 +474,16 @@ document.querySelectorAll("#faq .faq-item").forEach(item => {
       phone:   ($("phone")?.value || "").trim(),
       types,
       message: ($("message")?.value || "").trim(),
-      agree:   !!$("agree")?.checked,
-      page:    location.href,
-      ua:      navigator.userAgent
     };
 
     try{
-      const data = await sendToSheet(payload);
-      if(data && data.ok){
-        showAlert("문의가 정상 접수되었습니다. 감사합니다! 영업일 기준 24시간 내 회신 드립니다.", true);
-        form.reset();
-        form.querySelectorAll(".pill.on").forEach(p=>p.classList.remove("on"));
-      }else{
-        showAlert("전송 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-      }
+      await sendCORSsafe(payload);
+      // 응답 읽지 못하므로 '낙관적 성공' 처리
+      showAlert("문의가 정상 접수되었습니다. 감사합니다! 영업일 기준 24시간 내 회신 드립니다.", true);
+      form.reset();
+      form.querySelectorAll(".pill.on").forEach(p=>p.classList.remove("on"));
     }catch(err){
-      showAlert("네트워크 오류가 발생했습니다. 연결을 확인 후 다시 시도해 주세요.");
+      showAlert("전송 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.");
     }
   });
 })();
